@@ -1,0 +1,10 @@
+[package]
+name = "aoc_2024_rust"
+description = "Solution for Advent of code 2024"
+readme = "README.md"
+repository = "https://github.com/Ra0to/aoc_2024_rust"
+license-file = "LICENSE"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
