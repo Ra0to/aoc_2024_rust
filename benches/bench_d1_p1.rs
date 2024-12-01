@@ -21,6 +21,17 @@ fn bench_d1_p1(c: &mut Criterion) {
         )
     });
 
+    group.bench_function(
+        BenchmarkId::new("With_Unstable_Sort_wo_zip", "input"),
+        |b| {
+            b.iter_batched(
+                || input.clone(),
+                |data| black_box(day::solve_sort_unstable_wo_zip(data)),
+                BatchSize::SmallInput,
+            )
+        },
+    );
+
     group.finish();
 }
 

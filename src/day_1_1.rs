@@ -46,6 +46,17 @@ pub fn solve_sort_unstable(input: Vec<(i32, i32)>) -> i32 {
         .sum()
 }
 
+#[allow(dead_code)]
+pub fn solve_sort_unstable_wo_zip(input: Vec<(i32, i32)>) -> i32 {
+    let (mut left, mut right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
+    left.sort_unstable();
+    right.sort_unstable();
+    left.iter()
+        .enumerate()
+        .map(|(i, a)| (right[i] - a).abs())
+        .sum()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
