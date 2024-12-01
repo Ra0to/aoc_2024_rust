@@ -52,4 +52,17 @@ mod tests {
         // Then
         assert_eq!(result, answer);
     }
+
+    #[test]
+    fn problem() {
+        // Given
+        let input = read_input();
+        let answer = 2192892;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
 }

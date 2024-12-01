@@ -19,11 +19,30 @@ pub fn read_input() -> Vec<(i32, i32)> {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<(i32, i32)>) -> i32 {
+    solve_hash_map_optimized(input)
+}
+
+#[allow(dead_code)]
+pub fn solve_hash_map(input: Vec<(i32, i32)>) -> i32 {
     let (left, right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
     let mut count: HashMap<i32, i32> = HashMap::new();
 
     right.iter().for_each(|x| {
         count.insert(x.clone(), count.get(x).map(|v| v.clone()).unwrap_or(0) + 1);
+    });
+
+    left.iter()
+        .map(|x| x * count.get(&x).map(|v| v.clone()).unwrap_or(0))
+        .sum()
+}
+
+#[allow(dead_code)]
+pub fn solve_hash_map_optimized(input: Vec<(i32, i32)>) -> i32 {
+    let (left, right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
+    let mut count: HashMap<i32, i32> = HashMap::with_capacity(right.len());
+
+    right.iter().for_each(|x| {
+        count.entry(*x).and_modify(|e| *e += 1).or_insert(1);
     });
 
     left.iter()
@@ -47,6 +66,19 @@ mod tests {
             (3, 3),
         ];
         let answer = 31;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
+    fn problem() {
+        // Given
+        let input = read_input();
+        let answer = 22962826;
 
         // When
         let result = solve(input);
