@@ -1,20 +1,11 @@
 // Problem: https://adventofcode.com/2024/day/1
 
-use std::{collections::HashMap, fs::read_to_string};
+use crate::day_1_1;
+use std::collections::HashMap;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<(i32, i32)> {
-    read_to_string("./inputs/day_1_1/input")
-        .unwrap()
-        .lines()
-        .map(|line| {
-            let split = line
-                .split_whitespace()
-                .map(|pair| pair.parse::<i32>().unwrap())
-                .collect::<Vec<i32>>();
-            (split[0], split[1])
-        })
-        .collect::<Vec<(i32, i32)>>()
+    day_1_1::read_input()
 }
 
 #[allow(dead_code)]
