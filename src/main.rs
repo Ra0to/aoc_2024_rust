@@ -1,5 +1,5 @@
-mod day_1_1;
-use day_1_1 as day;
+use aoc_2024_rust::*;
+use day_1_2 as day;
 
 pub fn main() {
     let input = day::read_input();
