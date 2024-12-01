@@ -20,6 +20,33 @@ fn bench_d1_p2(c: &mut Criterion) {
             BatchSize::SmallInput,
         )
     });
+
+    group.bench_function(BenchmarkId::new("count_each_time", "input"), |b| {
+        b.iter_batched(
+            || input.clone(),
+            |data| black_box(day::solve_count_each_time(data)),
+            BatchSize::SmallInput,
+        )
+    });
+
+    group.bench_function(BenchmarkId::new("count_with_hash", "input"), |b| {
+        b.iter_batched(
+            || input.clone(),
+            |data| black_box(day::solve_count_with_hash(data)),
+            BatchSize::SmallInput,
+        )
+    });
+
+    group.bench_function(
+        BenchmarkId::new("HashMap_optimized_without_unzip", "input"),
+        |b| {
+            b.iter_batched(
+                || input.clone(),
+                |data| black_box(day::solve_hash_map_optimized_without_unzip(data)),
+                BatchSize::SmallInput,
+            )
+        },
+    );
     group.finish();
 }
 

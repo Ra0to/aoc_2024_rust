@@ -10,7 +10,7 @@ pub fn read_input() -> Vec<(i32, i32)> {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<(i32, i32)>) -> i32 {
-    solve_hash_map_optimized(input)
+    solve_hash_map_optimized_without_unzip(input)
 }
 
 #[allow(dead_code)]
@@ -36,8 +36,43 @@ pub fn solve_hash_map_optimized(input: Vec<(i32, i32)>) -> i32 {
         count.entry(*x).and_modify(|e| *e += 1).or_insert(1);
     });
 
+    left.iter().map(|x| x * *count.get(&x).unwrap_or(&0)).sum()
+}
+
+#[allow(dead_code)]
+pub fn solve_count_each_time(input: Vec<(i32, i32)>) -> i32 {
+    let (left, right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
+
     left.iter()
-        .map(|x| x * count.get(&x).map(|v| v.clone()).unwrap_or(0))
+        .map(|x| x * right.iter().filter(|e| *e == x).count() as i32)
+        .sum()
+}
+
+#[allow(dead_code)]
+pub fn solve_count_with_hash(input: Vec<(i32, i32)>) -> i32 {
+    let (left, right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
+    let mut count: HashMap<i32, i32> = HashMap::with_capacity(right.len());
+
+    left.iter()
+        .map(|x| {
+            *x * *count
+                .entry(*x)
+                .or_insert(right.iter().filter(|e| *e == x).count() as i32)
+        })
+        .sum()
+}
+
+#[allow(dead_code)]
+pub fn solve_hash_map_optimized_without_unzip(input: Vec<(i32, i32)>) -> i32 {
+    let mut count: HashMap<i32, i32> = HashMap::with_capacity(input.len());
+
+    input.iter().for_each(|(_, x)| {
+        count.entry(*x).and_modify(|e| *e += 1).or_insert(1);
+    });
+
+    input
+        .iter()
+        .map(|(x, _)| x * *count.get(&x).unwrap_or(&0))
         .sum()
 }
 

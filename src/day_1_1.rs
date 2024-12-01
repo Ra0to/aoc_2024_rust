@@ -19,7 +19,7 @@ pub fn read_input() -> Vec<(i32, i32)> {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<(i32, i32)>) -> i32 {
-    solve_sort(input)
+    solve_sort_unstable(input)
 }
 
 #[allow(dead_code)]
@@ -27,6 +27,18 @@ pub fn solve_sort(input: Vec<(i32, i32)>) -> i32 {
     let (mut left, mut right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
     left.sort();
     right.sort();
+    left.iter()
+        .zip(right)
+        .into_iter()
+        .map(|(a, b)| (b - a).abs())
+        .sum()
+}
+
+#[allow(dead_code)]
+pub fn solve_sort_unstable(input: Vec<(i32, i32)>) -> i32 {
+    let (mut left, mut right): (Vec<_>, Vec<_>) = input.into_iter().unzip();
+    left.sort_unstable();
+    right.sort_unstable();
     left.iter()
         .zip(right)
         .into_iter()
