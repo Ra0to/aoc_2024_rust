@@ -3,18 +3,15 @@
 use std::fs::read_to_string;
 
 #[allow(dead_code)]
-pub fn read_input() -> Vec<(i32, i32)> {
-    read_to_string("./inputs/d1")
-        .unwrap()
+pub fn read_input() -> std::io::Result<Vec<(i32, i32)>> {
+    Ok(read_to_string("./inputs/d1")?
         .lines()
         .map(|line| {
-            let split = line
-                .split_whitespace()
-                .map(|pair| pair.parse::<i32>().unwrap())
-                .collect::<Vec<i32>>();
-            (split[0], split[1])
+            line.split_once("   ")
+                .map(|(left, right)| (left.parse::<i32>().unwrap(), right.parse::<i32>().unwrap()))
+                .unwrap()
         })
-        .collect::<Vec<(i32, i32)>>()
+        .collect::<Vec<(i32, i32)>>())
 }
 
 #[allow(dead_code)]
@@ -116,7 +113,7 @@ mod tests {
     #[test]
     fn problem() {
         // Given
-        let input = read_input();
+        let input = read_input().expect("can't read problem input");
         let answer = read_to_string("./inputs/d1p1_answer")
             .unwrap()
             .trim()

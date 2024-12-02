@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<(i32, i32)> {
-    d1p1::read_input()
+    d1p1::read_input().unwrap()
 }
 
 #[allow(dead_code)]

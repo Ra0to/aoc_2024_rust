@@ -3,7 +3,7 @@ use criterion::{criterion_group, criterion_main, BatchSize, BenchmarkId, Criteri
 use std::hint::black_box;
 
 fn bench_d1_p1(c: &mut Criterion) {
-    let input = day::read_input();
+    let input = day::read_input().expect("can't read problem input");
     let mut group = c.benchmark_group("D1P1");
     group.bench_function(BenchmarkId::new("With_Sort", "input"), |b| {
         b.iter_batched(
