@@ -78,6 +78,8 @@ pub fn solve_hash_map_optimized_without_unzip(input: Vec<(i32, i32)>) -> i32 {
 
 #[cfg(test)]
 mod tests {
+    use std::fs::read_to_string;
+
     use super::*;
 
     #[test]
@@ -104,7 +106,11 @@ mod tests {
     fn problem() {
         // Given
         let input = read_input();
-        let answer = 22962826;
+        let answer = read_to_string("./inputs/d1p2_answer")
+            .unwrap()
+            .trim()
+            .parse::<i32>()
+            .unwrap();
 
         // When
         let result = solve(input);

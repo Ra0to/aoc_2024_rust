@@ -4,7 +4,7 @@ use std::fs::read_to_string;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<(i32, i32)> {
-    read_to_string("./inputs/day_1_1/input")
+    read_to_string("./inputs/d1")
         .unwrap()
         .lines()
         .map(|line| {
@@ -117,7 +117,11 @@ mod tests {
     fn problem() {
         // Given
         let input = read_input();
-        let answer = 2192892;
+        let answer = read_to_string("./inputs/d1p1_answer")
+            .unwrap()
+            .trim()
+            .parse::<i32>()
+            .unwrap();
 
         // When
         let result = solve(input);

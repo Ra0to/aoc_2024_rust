@@ -6,7 +6,7 @@ const MAX_DIFF: i32 = 3;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<Vec<i32>> {
-    read_to_string("./inputs/day_2/input")
+    read_to_string("./inputs/d2")
         .unwrap()
         .lines()
         .map(|line| {
@@ -95,7 +95,11 @@ mod tests {
     fn problem() {
         // Given
         let input = read_input();
-        let answer = 257;
+        let answer = read_to_string("./inputs/d2p1_answer")
+            .unwrap()
+            .trim()
+            .parse::<usize>()
+            .unwrap();
 
         // When
         let result = solve(input);

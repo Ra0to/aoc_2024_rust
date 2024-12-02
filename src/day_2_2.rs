@@ -67,6 +67,8 @@ fn is_valid_line(line: &Vec<i32>) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use std::fs::read_to_string;
+
     use super::*;
 
     #[test]
@@ -213,7 +215,11 @@ mod tests {
     fn problem() {
         // Given
         let input = read_input();
-        let answer = 328;
+        let answer = read_to_string("./inputs/d2p2_answer")
+            .unwrap()
+            .trim()
+            .parse::<usize>()
+            .unwrap();
 
         // When
         let result = solve(input);
