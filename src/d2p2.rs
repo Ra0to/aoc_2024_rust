@@ -2,8 +2,6 @@
 
 use crate::d2p1;
 
-const MAX_DIFF: i32 = 3;
-
 #[allow(dead_code)]
 pub fn read_input() -> Vec<Vec<i32>> {
     d2p1::read_input()
@@ -22,47 +20,19 @@ pub fn solve(input: Vec<Vec<i32>>) -> usize {
 }
 
 fn test_all_line_variants(line: &Vec<i32>) -> bool {
-    if is_valid_line(line) {
+    if d2p1::is_valid_line(line) {
         return true;
     }
 
     for i in 0..line.len() {
         let mut new_line = line.clone();
         new_line.remove(i);
-        if is_valid_line(&new_line) {
+        if d2p1::is_valid_line(&new_line) {
             return true;
         }
     }
 
     false
-}
-fn is_valid_line(line: &Vec<i32>) -> bool {
-    let mut last_diff: Option<i32> = None;
-    for slice in line.windows(2) {
-        let cur_diff = slice[1] - slice[0];
-
-        if cur_diff == 0 {
-            return false;
-        }
-        if cur_diff.abs() > MAX_DIFF {
-            return false;
-        }
-
-        match last_diff {
-            None => {
-                last_diff = Some(cur_diff);
-                continue;
-            }
-
-            Some(prev_diff) => {
-                if cur_diff.signum() != prev_diff.signum() {
-                    return false;
-                }
-            }
-        }
-    }
-
-    true
 }
 
 #[cfg(test)]

@@ -20,36 +20,42 @@ pub fn read_input() -> Vec<Vec<i32>> {
 #[allow(dead_code)]
 pub fn solve(input: Vec<Vec<i32>>) -> usize {
     let mut safe_lines = 0;
-    'outer: for line in input {
-        let mut last_diff: Option<i32> = None;
-        for slice in line.windows(2) {
-            let cur_diff = slice[1] - slice[0];
-
-            if cur_diff == 0 {
-                continue 'outer;
-            }
-            if cur_diff.abs() > MAX_DIFF {
-                continue 'outer;
-            }
-
-            match last_diff {
-                None => {
-                    last_diff = Some(cur_diff);
-                    continue;
-                }
-
-                Some(prev_diff) => {
-                    if cur_diff.signum() != prev_diff.signum() {
-                        continue 'outer;
-                    }
-                }
-            }
+    for line in input {
+        if is_valid_line(&line) {
+            safe_lines += 1;
         }
-
-        safe_lines += 1;
     }
 
     safe_lines
+}
+
+pub fn is_valid_line(line: &Vec<i32>) -> bool {
+    let mut last_diff: Option<i32> = None;
+    for slice in line.windows(2) {
+        let cur_diff = slice[1] - slice[0];
+
+        if cur_diff == 0 {
+            return false;
+        }
+        if cur_diff.abs() > MAX_DIFF {
+            return false;
+        }
+
+        match last_diff {
+            None => {
+                last_diff = Some(cur_diff);
+                continue;
+            }
+
+            Some(prev_diff) => {
+                if cur_diff.signum() != prev_diff.signum() {
+                    return false;
+                }
+            }
+        }
+    }
+
+    true
 }
 
 #[cfg(test)]
