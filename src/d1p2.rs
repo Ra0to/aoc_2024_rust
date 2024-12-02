@@ -19,11 +19,11 @@ pub fn solve_hash_map(input: Vec<(i32, i32)>) -> i32 {
     let mut count: HashMap<i32, i32> = HashMap::new();
 
     right.iter().for_each(|x| {
-        count.insert(x.clone(), count.get(x).map(|v| v.clone()).unwrap_or(0) + 1);
+        count.insert(*x, count.get(x).copied().unwrap_or(0) + 1);
     });
 
     left.iter()
-        .map(|x| x * count.get(&x).map(|v| v.clone()).unwrap_or(0))
+        .map(|x| x * count.get(x).copied().unwrap_or(0))
         .sum()
 }
 
@@ -36,7 +36,7 @@ pub fn solve_hash_map_optimized(input: Vec<(i32, i32)>) -> i32 {
         count.entry(*x).and_modify(|e| *e += 1).or_insert(1);
     });
 
-    left.iter().map(|x| x * *count.get(&x).unwrap_or(&0)).sum()
+    left.iter().map(|x| x * *count.get(x).unwrap_or(&0)).sum()
 }
 
 #[allow(dead_code)]
@@ -72,7 +72,7 @@ pub fn solve_hash_map_optimized_without_unzip(input: Vec<(i32, i32)>) -> i32 {
 
     input
         .iter()
-        .map(|(x, _)| x * *count.get(&x).unwrap_or(&0))
+        .map(|(x, _)| x * *count.get(x).unwrap_or(&0))
         .sum()
 }
 

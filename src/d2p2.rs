@@ -15,13 +15,13 @@ pub fn solve(input: Vec<Vec<i32>>) -> usize {
         .count()
 }
 
-fn test_all_line_variants(line: &Vec<i32>) -> bool {
+fn test_all_line_variants(line: &[i32]) -> bool {
     if d2p1::is_valid_line(line) {
         return true;
     }
 
     for i in 0..line.len() {
-        let mut new_line = line.clone();
+        let mut new_line = line.to_owned();
         new_line.remove(i);
         if d2p1::is_valid_line(&new_line) {
             return true;

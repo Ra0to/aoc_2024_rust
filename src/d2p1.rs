@@ -22,7 +22,7 @@ pub fn solve(input: Vec<Vec<i32>>) -> usize {
     input.into_iter().filter(|line| is_valid_line(line)).count()
 }
 
-pub fn is_valid_line(line: &Vec<i32>) -> bool {
+pub fn is_valid_line(line: &[i32]) -> bool {
     let mut last_diff: Option<i32> = None;
     for slice in line.windows(2) {
         let cur_diff = slice[1] - slice[0];
