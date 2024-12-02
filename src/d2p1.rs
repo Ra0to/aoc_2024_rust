@@ -19,14 +19,7 @@ pub fn read_input() -> Vec<Vec<i32>> {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<Vec<i32>>) -> usize {
-    let mut safe_lines = 0;
-    for line in input {
-        if is_valid_line(&line) {
-            safe_lines += 1;
-        }
-    }
-
-    safe_lines
+    input.into_iter().filter(|line| is_valid_line(line)).count()
 }
 
 pub fn is_valid_line(line: &Vec<i32>) -> bool {

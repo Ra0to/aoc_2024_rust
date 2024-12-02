@@ -9,14 +9,10 @@ pub fn read_input() -> Vec<Vec<i32>> {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<Vec<i32>>) -> usize {
-    let mut safe_lines = 0;
-    for line in input {
-        if test_all_line_variants(&line) {
-            safe_lines += 1;
-        }
-    }
-
-    safe_lines
+    input
+        .into_iter()
+        .filter(|line| test_all_line_variants(line))
+        .count()
 }
 
 fn test_all_line_variants(line: &Vec<i32>) -> bool {
