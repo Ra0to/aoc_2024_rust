@@ -1,11 +1,11 @@
 // Problem: https://adventofcode.com/2024/day/1
 
-use crate::day_1_1;
+use crate::d1p1;
 use std::collections::HashMap;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<(i32, i32)> {
-    day_1_1::read_input()
+    d1p1::read_input()
 }
 
 #[allow(dead_code)]

@@ -1,4 +1,4 @@
-use aoc_2024_rust::day_1_1 as day;
+use aoc_2024_rust::d1p1 as day;
 use criterion::{criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion};
 use std::hint::black_box;
 

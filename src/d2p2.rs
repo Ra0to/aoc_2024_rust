@@ -1,12 +1,12 @@
 // Problem: https://adventofcode.com/2024/day/2
 
-use crate::day_2_1;
+use crate::d2p1;
 
 const MAX_DIFF: i32 = 3;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<Vec<i32>> {
-    day_2_1::read_input()
+    d2p1::read_input()
 }
 
 #[allow(dead_code)]
