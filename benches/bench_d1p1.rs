@@ -4,8 +4,8 @@ use std::hint::black_box;
 
 fn bench_d1_p1(c: &mut Criterion) {
     let input = day::read_input().expect("can't read problem input");
-    let mut group = c.benchmark_group("D1P1");
-    group.bench_function(BenchmarkId::new("With_Sort", "input"), |b| {
+    let mut group = c.benchmark_group("d1p1");
+    group.bench_function(BenchmarkId::new("with_sort", "input"), |b| {
         b.iter_batched(
             || input.clone(),
             |data| black_box(day::solve_sort(data)),
@@ -13,7 +13,7 @@ fn bench_d1_p1(c: &mut Criterion) {
         )
     });
 
-    group.bench_function(BenchmarkId::new("With_Unstable_Sort", "input"), |b| {
+    group.bench_function(BenchmarkId::new("with_unstable_sort", "input"), |b| {
         b.iter_batched(
             || input.clone(),
             |data| black_box(day::solve_sort_unstable(data)),
@@ -22,7 +22,7 @@ fn bench_d1_p1(c: &mut Criterion) {
     });
 
     group.bench_function(
-        BenchmarkId::new("With_Unstable_Sort_wo_zip", "input"),
+        BenchmarkId::new("with_unstable_sort_wo_zip", "input"),
         |b| {
             b.iter_batched(
                 || input.clone(),

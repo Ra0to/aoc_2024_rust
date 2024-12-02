@@ -4,8 +4,8 @@ use std::hint::black_box;
 
 fn bench_d1_p2(c: &mut Criterion) {
     let input = day::read_input();
-    let mut group = c.benchmark_group("D1P2");
-    group.bench_function(BenchmarkId::new("HashMap", "input"), |b| {
+    let mut group = c.benchmark_group("d1p2");
+    group.bench_function(BenchmarkId::new("hash_map", "input"), |b| {
         b.iter_batched(
             || input.clone(),
             |data| black_box(day::solve_hash_map(data)),
@@ -13,7 +13,7 @@ fn bench_d1_p2(c: &mut Criterion) {
         )
     });
 
-    group.bench_function(BenchmarkId::new("HashMap_optimized", "input"), |b| {
+    group.bench_function(BenchmarkId::new("hash_map_optimized", "input"), |b| {
         b.iter_batched(
             || input.clone(),
             |data| black_box(day::solve_hash_map_optimized(data)),
@@ -38,7 +38,7 @@ fn bench_d1_p2(c: &mut Criterion) {
     });
 
     group.bench_function(
-        BenchmarkId::new("HashMap_optimized_without_unzip", "input"),
+        BenchmarkId::new("hash_map_optimized_without_unzip", "input"),
         |b| {
             b.iter_batched(
                 || input.clone(),
