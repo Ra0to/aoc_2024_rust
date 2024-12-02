@@ -1,8 +1,8 @@
 use aoc_2024_rust::d1p1 as day;
-use criterion::{criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion};
+use criterion::{criterion_group, BatchSize, BenchmarkId, Criterion};
 use std::hint::black_box;
 
-fn bench_d1_p1(c: &mut Criterion) {
+fn bench_d1p1(c: &mut Criterion) {
     let input = day::read_input().expect("can't read problem input");
     let mut group = c.benchmark_group("d1p1");
     group.bench_function(BenchmarkId::new("with_sort", "input"), |b| {
@@ -35,5 +35,4 @@ fn bench_d1_p1(c: &mut Criterion) {
     group.finish();
 }
 
-criterion_group!(benches, bench_d1_p1);
-criterion_main!(benches);
+criterion_group!(benches, bench_d1p1);

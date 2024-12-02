@@ -1,0 +1,13 @@
+use criterion::criterion_main;
+
+mod bench_d1p1;
+mod bench_d1p2;
+mod bench_d2p1;
+mod bench_d2p2;
+
+criterion_main!(
+    bench_d1p1::benches,
+    bench_d1p2::benches,
+    bench_d2p1::benches,
+    bench_d2p2::benches
+);
