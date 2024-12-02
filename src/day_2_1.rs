@@ -60,7 +60,7 @@ mod tests {
     fn test_1() {
         // Given
         let input = vec![
-            vec![7, 6, 4, 2, 1],
+            vec![7, 6, 4, 2, 1], //
             vec![1, 2, 7, 8, 9],
             vec![9, 7, 6, 2, 1],
             vec![1, 3, 2, 4, 5],
@@ -68,6 +68,21 @@ mod tests {
             vec![1, 3, 6, 7, 9],
         ];
         let answer = 2;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
+    fn test_2_invalid_diff_at_the_beginning() {
+        // Given
+        let input = vec![
+            vec![0, 0], //
+        ];
+        let answer = 0;
 
         // When
         let result = solve(input);
