@@ -2,6 +2,8 @@
 
 use std::{fs::read_to_string, iter::Peekable};
 
+use regex::Regex;
+
 #[allow(dead_code)]
 pub fn read_input() -> String {
     read_to_string("./inputs/d3").unwrap()
@@ -9,6 +11,11 @@ pub fn read_input() -> String {
 
 #[allow(dead_code)]
 pub fn solve(input: String) -> i32 {
+    solve_regex(input)
+}
+
+#[allow(dead_code)]
+pub fn solve_iter(input: String) -> i32 {
     let mut sum = 0;
     let mut iter = input.chars().peekable();
 
@@ -70,6 +77,22 @@ pub fn try_get_num<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<i
         }
     }
     Some(num)
+}
+
+#[allow(dead_code)]
+pub fn solve_regex(input: String) -> i32 {
+    Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)")
+        .expect("regex pattern should be valid")
+        .captures_iter(&input)
+        .map(|c| c.extract())
+        .map(|(_, [left, right])| {
+            left.parse::<i32>()
+                .expect("matched number should be valid int")
+                * right
+                    .parse::<i32>()
+                    .expect("matched number should be valid int")
+        })
+        .sum()
 }
 
 #[cfg(test)]
