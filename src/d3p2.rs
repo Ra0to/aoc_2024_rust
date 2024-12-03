@@ -40,10 +40,7 @@ fn try_get_operation_state<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> 
     match iter.peek() {
         Some('(') => (),
         Some('n') => {
-            if try_get_not(iter).is_none() {
-                return None;
-            }
-
+            try_get_not(iter)?;
             is_enable = false;
         }
         _ => return None,
