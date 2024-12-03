@@ -25,11 +25,11 @@ pub fn solve(input: String) -> i32 {
     sum
 }
 
-fn try_get_mul_res<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<i32> {
+pub fn try_get_mul_res<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<i32> {
     try_get_mul(iter).map(|(left, right)| left * right)
 }
 
-fn try_get_mul<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<(i32, i32)> {
+pub fn try_get_mul<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<(i32, i32)> {
     iter.next_if_eq(&'m')?;
     iter.next_if_eq(&'u')?;
     iter.next_if_eq(&'l')?;
@@ -42,7 +42,7 @@ fn try_get_mul<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<(i32,
     Some((left, right))
 }
 
-fn try_get_num<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<i32> {
+pub fn try_get_num<I: Iterator<Item = char>>(iter: &mut Peekable<I>) -> Option<i32> {
     let d = iter
         .next_if(|ch| ch.is_numeric())
         .and_then(|x| x.to_digit(10))? as i32;
