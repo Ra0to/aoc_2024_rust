@@ -11,7 +11,7 @@ pub fn read_input() -> String {
 
 #[allow(dead_code)]
 pub fn solve(input: String) -> i32 {
-    solve_regex(input)
+    solve_iter(input)
 }
 
 #[allow(dead_code)]
@@ -23,6 +23,9 @@ pub fn solve_iter(input: String) -> i32 {
         let res = try_get_mul_res(&mut iter);
         match res {
             Some(val) => sum += val,
+            _ if iter.peek().is_some_and(|x| x == &'m') => {
+                () // new 'mul' keywoard can starts here
+            }
             _ => {
                 iter.next();
             }
@@ -406,6 +409,19 @@ mod tests {
         // Given
         let input = "mul(a,b)".to_string();
         let answer = 0;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
+    fn test_24_valid_mul_with_invalid_prefix() {
+        // Given
+        let input = "mumul(1,2)".to_string();
+        let answer = 2;
 
         // When
         let result = solve(input);
