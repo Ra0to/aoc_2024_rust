@@ -27,7 +27,9 @@ pub fn solve(input: String) -> i32 {
             is_enabled = state;
             continue;
         }
-        iter.next();
+        if iter.peek().is_some_and(|x| !(x == &'m' || x == &'d')) {
+            iter.next();
+        }
     }
 
     sum
@@ -171,7 +173,19 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "not solved yet"]
+    fn test_8_mul_is_not_working_when_operations_disabled_with_partial_keyword_prefix() {
+        // Given
+        let input = "dodon't()mul(1,2)do()mul(1,2)".to_string();
+        let answer = 2;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
     fn problem() {
         // Given
         let input = read_input();
