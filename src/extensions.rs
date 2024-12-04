@@ -1,0 +1,26 @@
+use crate::point::P;
+
+pub trait CollectionExtensions<T> {
+    fn get_by(&self, index: i32) -> Option<&T>;
+}
+
+impl<T> CollectionExtensions<T> for [T] {
+    fn get_by(&self, index: i32) -> Option<&T> {
+        if index < 0 {
+            return None;
+        }
+
+        let index = index as usize;
+        self.get(index)
+    }
+}
+
+pub trait TableExtensions<T> {
+    fn get_by_p(&self, index: P) -> Option<&T>;
+}
+
+impl<T> TableExtensions<T> for [Vec<T>] {
+    fn get_by_p(&self, index: P) -> Option<&T> {
+        self.get_by(index.y).and_then(|line| line.get_by(index.x))
+    }
+}

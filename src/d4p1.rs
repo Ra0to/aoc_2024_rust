@@ -1,63 +1,7 @@
 // Problem: https://adventofcode.com/2024/day/4
 
+use crate::{extensions::*, point::P};
 use std::fs::read_to_string;
-
-#[derive(Debug, Clone)]
-pub struct P(i32, i32);
-
-impl P {
-    pub fn add(self, other: &Self) -> Self {
-        Self(self.0 + other.0, self.1 + other.1)
-    }
-
-    pub fn mul(self, mul: i32) -> Self {
-        Self(self.0 * mul, self.1 * mul)
-    }
-
-    pub fn pair(x: i32, y: i32) -> Self {
-        Self(x, y)
-    }
-
-    pub fn zero() -> Self {
-        Self::pair(0, 0)
-    }
-
-    pub fn one() -> Self {
-        Self::pair(1, 1)
-    }
-
-    pub fn up() -> Self {
-        Self::pair(0, 1)
-    }
-
-    pub fn down() -> Self {
-        Self::pair(0, -1)
-    }
-
-    pub fn left() -> Self {
-        Self::pair(-1, 0)
-    }
-
-    pub fn right() -> Self {
-        Self::pair(1, 0)
-    }
-
-    pub fn down_left() -> Self {
-        Self::down().add(&Self::left())
-    }
-
-    pub fn down_right() -> Self {
-        Self::down().add(&Self::right())
-    }
-
-    pub fn up_left() -> Self {
-        Self::up().add(&Self::left())
-    }
-
-    pub fn up_right() -> Self {
-        Self::up().add(&Self::right())
-    }
-}
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<Vec<char>> {
@@ -104,32 +48,15 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
     count
 }
 
-pub fn test_word(input: &Vec<Vec<char>>, start: P, direction: P) -> bool {
+pub fn test_word(input: &[Vec<char>], start: P, direction: P) -> bool {
     test_symbol(input, start.clone(), 'X')
         && test_symbol(input, start.clone().add(&direction.clone().mul(1)), 'M')
         && test_symbol(input, start.clone().add(&direction.clone().mul(2)), 'A')
         && test_symbol(input, start.clone().add(&direction.clone().mul(3)), 'S')
 }
 
-pub fn test_symbol(input: &Vec<Vec<char>>, pos: P, ch: char) -> bool {
-    let y = pos.1;
-    if !(0_i32..(input.len() as i32)).contains(&y) {
-        return false;
-    }
-    let y = y as usize;
-
-    input
-        .get(y)
-        .and_then(|line| {
-            let x = pos.0;
-            if !(0_i32..(line.len() as i32)).contains(&x) {
-                return None;
-            }
-
-            let x = x as usize;
-            line.get(x)
-        })
-        .is_some_and(|target| target == &ch)
+pub fn test_symbol(input: &[Vec<char>], pos: P, ch: char) -> bool {
+    input.get_by_p(pos).is_some_and(|target| target == &ch)
 }
 
 #[cfg(test)]

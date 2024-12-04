@@ -1,7 +1,8 @@
 // Problem: https://adventofcode.com/2024/day/4
 
 use crate::d4p1;
-use crate::d4p1::{test_symbol, P};
+use crate::d4p1::test_symbol;
+use crate::point::P;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<Vec<char>> {
