@@ -466,7 +466,6 @@ MXMXAXMASX"
     }
 
     #[test]
-    #[ignore = "not solved yet"]
     fn problem() {
         // Given
         let input = read_input();
