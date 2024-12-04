@@ -40,8 +40,8 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
             }
 
             count += directions
-                .iter()
-                .filter(|d| test_word(&input, p, **d))
+                .into_iter()
+                .filter(|d| test_word(&input, p, *d))
                 .count();
         }
     }
@@ -51,9 +51,9 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
 
 pub fn test_word(input: &[Vec<char>], start: P, direction: P) -> bool {
     test_symbol(input, start, 'X')
-        && test_symbol(input, start.add(direction), 'M')
-        && test_symbol(input, start.add(direction.mul(2)), 'A')
-        && test_symbol(input, start.add(direction.mul(3)), 'S')
+        && test_symbol(input, start + direction, 'M')
+        && test_symbol(input, start + 2 * direction, 'A')
+        && test_symbol(input, start + 3 * direction, 'S')
 }
 
 pub fn test_symbol(input: &[Vec<char>], pos: P, ch: char) -> bool {

@@ -1,3 +1,5 @@
+use std::ops;
+
 #[derive(Debug, Clone, Copy)]
 pub struct P {
     pub x: i32,
@@ -5,20 +7,6 @@ pub struct P {
 }
 
 impl P {
-    pub fn add(self, other: Self) -> Self {
-        Self {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-
-    pub fn mul(self, mul: i32) -> Self {
-        Self {
-            x: self.x * mul,
-            y: self.y * mul,
-        }
-    }
-
     pub fn pair(x: i32, y: i32) -> Self {
         Self { x, y }
     }
@@ -48,18 +36,48 @@ impl P {
     }
 
     pub fn down_left() -> Self {
-        Self::down().add(Self::left())
+        Self::down() + Self::left()
     }
 
     pub fn down_right() -> Self {
-        Self::down().add(Self::right())
+        Self::down() + Self::right()
     }
 
     pub fn up_left() -> Self {
-        Self::up().add(Self::left())
+        Self::up() + Self::left()
     }
 
     pub fn up_right() -> Self {
-        Self::up().add(Self::right())
+        Self::up() + Self::right()
+    }
+}
+
+impl ops::Add for P {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Self::Output {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
+    }
+}
+
+impl ops::Mul<i32> for P {
+    type Output = Self;
+
+    fn mul(self, rhs: i32) -> Self::Output {
+        Self::Output {
+            x: self.x * rhs,
+            y: self.y * rhs,
+        }
+    }
+}
+
+impl ops::Mul<P> for i32 {
+    type Output = P;
+
+    fn mul(self, rhs: P) -> Self::Output {
+        rhs * self
     }
 }

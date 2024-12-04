@@ -39,16 +39,16 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
 }
 
 pub fn test_x_shape(input: &[Vec<char>], middle: P) -> bool {
-    (test_mas_word(input, middle.add(P::up_left()), P::down_right())
-        || test_mas_word(input, middle.add(P::down_right()), P::up_left()))
-        && (test_mas_word(input, middle.add(P::up_right()), P::down_left())
-            || test_mas_word(input, middle.add(P::down_left()), P::up_right()))
+    (test_mas_word(input, middle + P::up_left(), P::down_right())
+        || test_mas_word(input, middle + P::down_right(), P::up_left()))
+        && (test_mas_word(input, middle + P::up_right(), P::down_left())
+            || test_mas_word(input, middle + P::down_left(), P::up_right()))
 }
 
 pub fn test_mas_word(input: &[Vec<char>], start: P, direction: P) -> bool {
     test_symbol(input, start, 'M')
-        && test_symbol(input, start.add(direction), 'A')
-        && test_symbol(input, start.add(direction.mul(2)), 'S')
+        && test_symbol(input, start + direction, 'A')
+        && test_symbol(input, start + 2 * direction, 'S')
 }
 
 #[cfg(test)]
