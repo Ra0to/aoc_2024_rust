@@ -35,7 +35,7 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
         for x in 0..width {
             // Problem is 1000x1000 so we can safely cast indexes to i32
             let p = P::pair(x as i32, y as i32);
-            if !test_symbol(&input, p, 'X') {
+            if !input.is_at_p(p, &'X') {
                 continue;
             }
 
@@ -50,14 +50,10 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
 }
 
 pub fn test_word(input: &[Vec<char>], start: P, direction: P) -> bool {
-    test_symbol(input, start, 'X')
-        && test_symbol(input, start + direction, 'M')
-        && test_symbol(input, start + 2 * direction, 'A')
-        && test_symbol(input, start + 3 * direction, 'S')
-}
-
-pub fn test_symbol(input: &[Vec<char>], pos: P, ch: char) -> bool {
-    input.get_by_p(pos).is_some_and(|target| target == &ch)
+    input.is_at_p(start, &'X')
+        && input.is_at_p(start + direction, &'M')
+        && input.is_at_p(start + 2 * direction, &'A')
+        && input.is_at_p(start + 3 * direction, &'S')
 }
 
 #[cfg(test)]

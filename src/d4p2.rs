@@ -1,7 +1,7 @@
 // Problem: https://adventofcode.com/2024/day/4
 
 use crate::d4p1;
-use crate::d4p1::test_symbol;
+use crate::extensions::TableExtensions;
 use crate::point::P;
 
 #[allow(dead_code)]
@@ -25,7 +25,7 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
         let width = input[y].len();
         for x in 0..width {
             let p = P::pair(x as i32, y as i32);
-            if !test_symbol(&input, p, 'A') {
+            if !input.is_at_p(p, &'A') {
                 continue;
             }
 
@@ -46,9 +46,9 @@ pub fn test_x_shape(input: &[Vec<char>], middle: P) -> bool {
 }
 
 pub fn test_mas_word(input: &[Vec<char>], start: P, direction: P) -> bool {
-    test_symbol(input, start, 'M')
-        && test_symbol(input, start + direction, 'A')
-        && test_symbol(input, start + 2 * direction, 'S')
+    input.is_at_p(start, &'M')
+        && input.is_at_p(start + direction, &'A')
+        && input.is_at_p(start + 2 * direction, &'S')
 }
 
 #[cfg(test)]
