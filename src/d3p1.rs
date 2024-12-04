@@ -23,9 +23,7 @@ pub fn solve_iter(input: String) -> i32 {
         let res = try_get_mul_res(&mut iter);
         match res {
             Some(val) => sum += val,
-            _ if iter.peek().is_some_and(|x| x == &'m') => {
-                () // new 'mul' keywoard can starts here
-            }
+            _ if iter.peek().is_some_and(|x| x == &'m') => {}
             _ => {
                 iter.next();
             }
