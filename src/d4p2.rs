@@ -25,11 +25,11 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
         let width = input[y].len();
         for x in 0..width {
             let p = P::pair(x as i32, y as i32);
-            if !test_symbol(&input, p.clone(), 'A') {
+            if !test_symbol(&input, p, 'A') {
                 continue;
             }
 
-            if test_x_shape(&input, p.clone()) {
+            if test_x_shape(&input, p) {
                 count += 1;
             }
         }
@@ -39,16 +39,16 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
 }
 
 pub fn test_x_shape(input: &[Vec<char>], middle: P) -> bool {
-    (test_mas_word(input, middle.clone().add(&P::up_left()), P::down_right())
-        || test_mas_word(input, middle.clone().add(&P::down_right()), P::up_left()))
-        && (test_mas_word(input, middle.clone().add(&P::up_right()), P::down_left())
-            || test_mas_word(input, middle.clone().add(&P::down_left()), P::up_right()))
+    (test_mas_word(input, middle.add(P::up_left()), P::down_right())
+        || test_mas_word(input, middle.add(P::down_right()), P::up_left()))
+        && (test_mas_word(input, middle.add(P::up_right()), P::down_left())
+            || test_mas_word(input, middle.add(P::down_left()), P::up_right()))
 }
 
 pub fn test_mas_word(input: &[Vec<char>], start: P, direction: P) -> bool {
-    test_symbol(input, start.clone(), 'M')
-        && test_symbol(input, start.clone().add(&direction.clone().mul(1)), 'A')
-        && test_symbol(input, start.clone().add(&direction.clone().mul(2)), 'S')
+    test_symbol(input, start, 'M')
+        && test_symbol(input, start.add(direction), 'A')
+        && test_symbol(input, start.add(direction.mul(2)), 'S')
 }
 
 #[cfg(test)]

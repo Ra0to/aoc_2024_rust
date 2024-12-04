@@ -33,14 +33,15 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
     for y in 0..height {
         let width = input[y].len();
         for x in 0..width {
+            // Problem is 1000x1000 so we can safely cast indexes to i32
             let p = P::pair(x as i32, y as i32);
-            if !test_symbol(&input, p.clone(), 'X') {
+            if !test_symbol(&input, p, 'X') {
                 continue;
             }
 
             count += directions
                 .iter()
-                .filter(|d| test_word(&input, p.clone(), (*d).clone()))
+                .filter(|d| test_word(&input, p, **d))
                 .count();
         }
     }
@@ -49,10 +50,10 @@ pub fn solve(input: Vec<Vec<char>>) -> usize {
 }
 
 pub fn test_word(input: &[Vec<char>], start: P, direction: P) -> bool {
-    test_symbol(input, start.clone(), 'X')
-        && test_symbol(input, start.clone().add(&direction.clone().mul(1)), 'M')
-        && test_symbol(input, start.clone().add(&direction.clone().mul(2)), 'A')
-        && test_symbol(input, start.clone().add(&direction.clone().mul(3)), 'S')
+    test_symbol(input, start, 'X')
+        && test_symbol(input, start.add(direction), 'M')
+        && test_symbol(input, start.add(direction.mul(2)), 'A')
+        && test_symbol(input, start.add(direction.mul(3)), 'S')
 }
 
 pub fn test_symbol(input: &[Vec<char>], pos: P, ch: char) -> bool {

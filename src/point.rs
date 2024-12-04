@@ -1,11 +1,11 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct P {
     pub x: i32,
     pub y: i32,
 }
 
 impl P {
-    pub fn add(self, other: &Self) -> Self {
+    pub fn add(self, other: Self) -> Self {
         Self {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -48,18 +48,18 @@ impl P {
     }
 
     pub fn down_left() -> Self {
-        Self::down().add(&Self::left())
+        Self::down().add(Self::left())
     }
 
     pub fn down_right() -> Self {
-        Self::down().add(&Self::right())
+        Self::down().add(Self::right())
     }
 
     pub fn up_left() -> Self {
-        Self::up().add(&Self::left())
+        Self::up().add(Self::left())
     }
 
     pub fn up_right() -> Self {
-        Self::up().add(&Self::right())
+        Self::up().add(Self::right())
     }
 }
