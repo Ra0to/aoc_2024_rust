@@ -25,7 +25,7 @@ pub fn solve(input: (Vec<(usize, usize)>, Vec<Vec<usize>>)) -> usize {
 
         let mut pages_hash = HashMap::<usize, usize>::new();
         for (index, page) in manual.iter().enumerate() {
-            if pages_hash.contains_key(&page) {
+            if pages_hash.contains_key(page) {
                 panic!("Page duplicate! page: `{page}`");
             }
 
@@ -33,10 +33,10 @@ pub fn solve(input: (Vec<(usize, usize)>, Vec<Vec<usize>>)) -> usize {
         }
 
         let is_satisfy = rules.iter().all(|(first, next)| {
-            if !pages_hash.contains_key(&first) {
+            if !pages_hash.contains_key(first) {
                 return true;
             }
-            if !pages_hash.contains_key(&next) {
+            if !pages_hash.contains_key(next) {
                 return true;
             }
 

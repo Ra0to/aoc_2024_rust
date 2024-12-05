@@ -66,10 +66,10 @@ pub fn solve(input: (Vec<(usize, usize)>, Vec<Vec<usize>>)) -> usize {
         }
 
         let is_satisfy = rules.iter().all(|(first, next)| {
-            if !pages_hash.contains_key(&first) {
+            if !pages_hash.contains_key(first) {
                 return true;
             }
-            if !pages_hash.contains_key(&next) {
+            if !pages_hash.contains_key(next) {
                 return true;
             }
 
