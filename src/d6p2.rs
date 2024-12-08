@@ -63,7 +63,25 @@ pub fn move_guard(map: &mut [Vec<i32>], pos: P, dir: P) -> bool {
                 *e += 1;
             }
             match map.get_mut_by_p(new_pos) {
-                // I have no idea why 5 but this works
+                /* 06.11.2024 I have no idea why 5 but this works
+                 * 08.11.2024 5 is correct because, we can pass cell in 4 different directions
+                 * 1. From left to right
+                 * 2. From right to left
+                 * 3. From up to down
+                 * 4. From down to up
+                 *
+                 * Input examle:
+                 *
+                 *     ........
+                 *     ...#....
+                 *     ....#...
+                 *     .#......
+                 *     ...4...#
+                 *     ...^..#.
+                 *     #.......
+                 *     ...#....
+                 *
+                 */
                 Some(e) if *e >= 5 => return true,
                 _ => (),
             }
