@@ -14,6 +14,14 @@ fn bench(c: &mut Criterion) {
         )
     });
 
+    group.bench_function(BenchmarkId::new("op_generation_optimized", "input"), |b| {
+        b.iter_batched(
+            || input.clone(),
+            |data| black_box(day::solve_generator_optimized(data)),
+            BatchSize::SmallInput,
+        )
+    });
+
     group.bench_function(BenchmarkId::new("op_recursion", "input"), |b| {
         b.iter_batched(
             || input.clone(),

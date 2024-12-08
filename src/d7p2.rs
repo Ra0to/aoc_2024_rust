@@ -18,7 +18,11 @@ pub enum Op {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<(i64, Vec<i64>)>) -> i64 {
-    solve_recursion_parallel(input)
+    // solve_generator(input)
+    // solve_recursion(input)
+    // solve_recursion_numeric_concatenation(input)
+    // solve_recursion_parallel(input)
+    solve_generator_optimized(input)
 }
 
 // ~1.9 s
@@ -152,6 +156,39 @@ pub fn solve_recursion_parallel(input: Vec<(i64, Vec<i64>)>) -> i64 {
         .filter(|(res, line)| try_find_ops_rec(line, *res, line[0], 1))
         .map(|(res, _)| res)
         .sum()
+}
+
+// ~1.5 s
+#[allow(dead_code)]
+pub fn solve_generator_optimized(input: Vec<(i64, Vec<i64>)>) -> i64 {
+    input
+        .iter()
+        .filter(|(res, line)| try_find_ops_optimized(line, *res))
+        .map(|(res, _)| res)
+        .sum()
+}
+
+pub fn try_find_ops_optimized(nums: &[i64], res: i64) -> bool {
+    let ops_cnt = nums.len() - 1;
+    let max_ops = 3_i64.pow(ops_cnt as u32);
+    (0..max_ops).any(|ops| calc_line_optimized(nums, ops) == res)
+}
+
+pub fn calc_line_optimized(nums: &[i64], mut seq: i64) -> i64 {
+    let mut res = nums[0];
+    for num in &nums[1..] {
+        let op = seq % 3;
+        seq /= 3;
+
+        match op {
+            0 => res += num,
+            1 => res *= num,
+            2 => res = format!("{res}{num}").parse::<i64>().unwrap(),
+            _ => panic!("unexpected operation index: {op}"),
+        }
+    }
+
+    res
 }
 
 #[cfg(test)]
