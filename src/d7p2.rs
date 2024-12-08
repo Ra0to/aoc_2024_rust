@@ -21,8 +21,8 @@ pub fn solve(input: Vec<(i64, Vec<i64>)>) -> i64 {
     // solve_generator(input)
     // solve_recursion(input)
     // solve_recursion_numeric_concatenation(input)
-    solve_recursion_parallel(input)
     // solve_generator_optimized(input)
+    solve_recursion_parallel(input)
 }
 
 // ~1.9 s
@@ -159,6 +159,13 @@ pub fn solve_recursion_parallel(input: Vec<(i64, Vec<i64>)>) -> i64 {
 }
 
 // ~1.5 s
+// Generator is slower than recursion because we should evaluate all line (execute all operations
+// on any op change). Recursion insted stores previous calculations in the call stack. 
+//
+// N - number of element in line
+//
+// Generator solution - O(N*3^N)
+// Recursion solution - O(3^N)
 #[allow(dead_code)]
 pub fn solve_generator_optimized(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
