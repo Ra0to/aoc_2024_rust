@@ -21,8 +21,8 @@ pub fn solve(input: Vec<(i64, Vec<i64>)>) -> i64 {
     // solve_generator(input)
     // solve_recursion(input)
     // solve_recursion_numeric_concatenation(input)
-    // solve_recursion_parallel(input)
-    solve_generator_optimized(input)
+    solve_recursion_parallel(input)
+    // solve_generator_optimized(input)
 }
 
 // ~1.9 s
@@ -118,7 +118,7 @@ pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -
         )
 }
 
-// ~250 ms
+// ~16.9 ms
 #[allow(dead_code)]
 pub fn solve_recursion_numeric_concatenation(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
@@ -139,21 +139,21 @@ pub fn try_find_ops_rec_numeric_concat(
     }
 
     let val = nums[index];
-    try_find_ops_rec(nums, target, current + val, index + 1)
-        || try_find_ops_rec(nums, target, current * val, index + 1)
-        || try_find_ops_rec(nums, target, concat_nums(current, val), index + 1)
+    try_find_ops_rec_numeric_concat(nums, target, current + val, index + 1)
+        || try_find_ops_rec_numeric_concat(nums, target, current * val, index + 1)
+        || try_find_ops_rec_numeric_concat(nums, target, concat_nums(current, val), index + 1)
 }
 
 pub fn concat_nums(lhs: i64, rhs: i64) -> i64 {
     lhs * 10_i64.pow(rhs.ilog10() + 1) + rhs
 }
 
-// ~67 ms
+// ~3.3 ms
 #[allow(dead_code)]
 pub fn solve_recursion_parallel(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
         .par_iter()
-        .filter(|(res, line)| try_find_ops_rec(line, *res, line[0], 1))
+        .filter(|(res, line)| try_find_ops_rec_numeric_concat(line, *res, line[0], 1))
         .map(|(res, _)| res)
         .sum()
 }

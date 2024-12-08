@@ -30,13 +30,16 @@ fn bench(c: &mut Criterion) {
         )
     });
 
-    group.bench_function(BenchmarkId::new("op_recursion_fast_concat", "input"), |b| {
-        b.iter_batched(
-            || input.clone(),
-            |data| black_box(day::solve_recursion_numeric_concatenation(data)),
-            BatchSize::SmallInput,
-        )
-    });
+    group.bench_function(
+        BenchmarkId::new("op_recursion_numeric_concat", "input"),
+        |b| {
+            b.iter_batched(
+                || input.clone(),
+                |data| black_box(day::solve_recursion_numeric_concatenation(data)),
+                BatchSize::SmallInput,
+            )
+        },
+    );
 
     group.bench_function(BenchmarkId::new("op_recursion_parallel", "input"), |b| {
         b.iter_batched(
