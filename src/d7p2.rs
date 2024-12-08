@@ -1,5 +1,7 @@
 // Problem: https://adventofcode.com/2024/day/7
 
+use rayon::prelude::*;
+
 use crate::d7p1;
 
 #[allow(dead_code)]
@@ -16,7 +18,7 @@ pub enum Op {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<(i64, Vec<i64>)>) -> i64 {
-    solve_recursion(input)
+    solve_recursion_parallel(input)
 }
 
 // ~1.9 s
@@ -140,6 +142,16 @@ pub fn try_find_ops_rec_numeric_concat(
 
 pub fn concat_nums(lhs: i64, rhs: i64) -> i64 {
     lhs * 10_i64.pow(rhs.ilog10() + 1) + rhs
+}
+
+// ~67 ms
+#[allow(dead_code)]
+pub fn solve_recursion_parallel(input: Vec<(i64, Vec<i64>)>) -> i64 {
+    input
+        .par_iter()
+        .filter(|(res, line)| try_find_ops_rec(line, *res, line[0], 1))
+        .map(|(res, _)| res)
+        .sum()
 }
 
 #[cfg(test)]
