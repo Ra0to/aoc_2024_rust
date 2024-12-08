@@ -79,7 +79,6 @@ pub fn calc_line(nums: &[i64], ops: &[Op]) -> i64 {
     res
 }
 
-
 // ~316 µs
 #[allow(dead_code)]
 pub fn solve_recursion(input: Vec<(i64, Vec<i64>)>) -> i64 {
@@ -100,8 +99,8 @@ pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -
     }
 
     let val = nums[index];
-    try_find_ops_rec(nums, target, current + val, index + 1) ||
-    try_find_ops_rec(nums, target, current * val, index + 1)
+    try_find_ops_rec(nums, target, current + val, index + 1)
+        || try_find_ops_rec(nums, target, current * val, index + 1)
 }
 
 #[cfg(test)]
