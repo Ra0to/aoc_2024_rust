@@ -116,6 +116,40 @@ pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -
         )
 }
 
+// ~158 ms
+#[allow(dead_code)]
+pub fn solve_recursion_numeric_concatenation(input: Vec<(i64, Vec<i64>)>) -> i64 {
+    input
+        .iter()
+        .filter(|(res, line)| try_find_ops_rec_numeric_concat(line, *res, line[0], 1))
+        .map(|(res, _)| res)
+        .sum()
+}
+
+pub fn try_find_ops_rec_numeric_concat(
+    nums: &[i64],
+    target: i64,
+    current: i64,
+    index: usize,
+) -> bool {
+    if index >= nums.len() {
+        return current == target;
+    }
+
+    if current > target {
+        return false;
+    }
+
+    let val = nums[index];
+    try_find_ops_rec(nums, target, current + val, index + 1)
+        || try_find_ops_rec(nums, target, current * val, index + 1)
+        || try_find_ops_rec(nums, target, concat_nums(current, val), index + 1)
+}
+
+pub fn concat_nums(lhs: i64, rhs: i64) -> i64 {
+    lhs * 10_i64.pow(rhs.ilog10() + 1) + rhs
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::read_to_string;
