@@ -1,5 +1,5 @@
 use aoc_2024_rust::*;
-use d8p1 as day;
+use d8p2 as day;
 
 pub fn main() {
     let input = day::read_input();
