@@ -86,7 +86,7 @@ fn get_ops_from_num(mut x: u32) -> Vec<Op> {
     result.into_iter().rev().collect()
 }
 
-// ~163 ms
+// ~238 ms
 #[allow(dead_code)]
 pub fn solve_recursion(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
@@ -101,10 +101,6 @@ pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -
         return current == target;
     }
 
-    if current > target {
-        return false;
-    }
-
     let val = nums[index];
     try_find_ops_rec(nums, target, current + val, index + 1)
         || try_find_ops_rec(nums, target, current * val, index + 1)
@@ -116,7 +112,7 @@ pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -
         )
 }
 
-// ~158 ms
+// ~250 ms
 #[allow(dead_code)]
 pub fn solve_recursion_numeric_concatenation(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
@@ -134,10 +130,6 @@ pub fn try_find_ops_rec_numeric_concat(
 ) -> bool {
     if index >= nums.len() {
         return current == target;
-    }
-
-    if current > target {
-        return false;
     }
 
     let val = nums[index];
@@ -171,6 +163,22 @@ mod tests {
             (292, vec![11, 6, 16, 20]),
         ];
         let answer = 11387;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
+    fn test_2() {
+        // Given
+        let input = vec![
+            (3, vec![5, 7, 0, 3]),
+            //        *   *  +
+        ];
+        let answer = 3;
 
         // When
         let result = solve(input);

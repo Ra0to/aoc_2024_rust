@@ -79,7 +79,7 @@ pub fn calc_line(nums: &[i64], ops: &[Op]) -> i64 {
     res
 }
 
-// ~316 µs
+// ~370 µs
 #[allow(dead_code)]
 pub fn solve_recursion(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
@@ -92,10 +92,6 @@ pub fn solve_recursion(input: Vec<(i64, Vec<i64>)>) -> i64 {
 pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -> bool {
     if index >= nums.len() {
         return current == target;
-    }
-
-    if current > target {
-        return false;
     }
 
     let val = nums[index];
@@ -122,6 +118,22 @@ mod tests {
             (292, vec![11, 6, 16, 20]),
         ];
         let answer = 3749;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
+    fn test_2() {
+        // Given
+        let input = vec![
+            (3, vec![5, 7, 0, 3]),
+            //        *   *  +
+        ];
+        let answer = 3;
 
         // When
         let result = solve(input);
