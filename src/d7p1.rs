@@ -28,6 +28,12 @@ pub enum Op {
 
 #[allow(dead_code)]
 pub fn solve(input: Vec<(i64, Vec<i64>)>) -> i64 {
+    solve_recursion(input)
+}
+
+// ~15 ms
+#[allow(dead_code)]
+pub fn solve_generator(input: Vec<(i64, Vec<i64>)>) -> i64 {
     input
         .iter()
         .filter(|(res, line)| try_find_ops(line, *res))
@@ -71,6 +77,31 @@ pub fn calc_line(nums: &[i64], ops: &[Op]) -> i64 {
     }
 
     res
+}
+
+
+// ~316 µs
+#[allow(dead_code)]
+pub fn solve_recursion(input: Vec<(i64, Vec<i64>)>) -> i64 {
+    input
+        .iter()
+        .filter(|(res, line)| try_find_ops_rec(line, *res, line[0], 1))
+        .map(|(res, _)| res)
+        .sum()
+}
+
+pub fn try_find_ops_rec(nums: &[i64], target: i64, current: i64, index: usize) -> bool {
+    if index >= nums.len() {
+        return current == target;
+    }
+
+    if current > target {
+        return false;
+    }
+
+    let val = nums[index];
+    try_find_ops_rec(nums, target, current + val, index + 1) ||
+    try_find_ops_rec(nums, target, current * val, index + 1)
 }
 
 #[cfg(test)]

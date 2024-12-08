@@ -1,0 +1,27 @@
+use aoc_2024_rust::d7p1 as day;
+use criterion::{criterion_group, BatchSize, BenchmarkId, Criterion};
+use std::hint::black_box;
+
+fn bench_d7p1(c: &mut Criterion) {
+    let input = day::read_input();
+    let mut group = c.benchmark_group("d7p1");
+    group.bench_function(BenchmarkId::new("op_generation", "input"), |b| {
+        b.iter_batched(
+            || input.clone(),
+            |data| black_box(day::solve_generator(data)),
+            BatchSize::SmallInput,
+        )
+    });
+
+    group.bench_function(BenchmarkId::new("op_recursion", "input"), |b| {
+        b.iter_batched(
+            || input.clone(),
+            |data| black_box(day::solve_recursion(data)),
+            BatchSize::SmallInput,
+        )
+    });
+
+    group.finish();
+}
+
+criterion_group!(benches, bench_d7p1);
