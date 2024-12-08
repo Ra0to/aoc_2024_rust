@@ -43,7 +43,9 @@ pub fn solve(input: (Vec<Vec<i32>>, P)) -> usize {
 }
 
 pub fn is_loop(map: &mut [Vec<i32>], pos: P) -> bool {
-    map.get_mut_by_p(pos).and_then(|e| Some(*e += 1));
+    if let Some(e) = map.get_mut_by_p(pos) {
+        *e += 1;
+    }
     // Our map has inverted numbers by Y
     move_guard(map, pos, P::down())
 }
@@ -51,32 +53,34 @@ pub fn is_loop(map: &mut [Vec<i32>], pos: P) -> bool {
 pub fn move_guard(map: &mut [Vec<i32>], pos: P, dir: P) -> bool {
     let new_pos = pos + dir;
     match map.get_by_p(new_pos) {
-        None => return false,
+        None => false,
         Some(&-1) => {
             let dir = get_next_dir(dir);
-            return move_guard(map, pos, dir);
+            move_guard(map, pos, dir)
         }
         Some(_) => {
-            map.get_mut_by_p(new_pos).and_then(|e| Some(*e += 1));
+            if let Some(e) = map.get_mut_by_p(new_pos) {
+                *e += 1;
+            }
             match map.get_mut_by_p(new_pos) {
                 // I have no idea why 5 but this works
                 Some(e) if *e >= 5 => return true,
                 _ => (),
             }
-            return move_guard(map, new_pos, dir);
+            move_guard(map, new_pos, dir)
         }
     }
 }
 
 pub fn get_next_dir(dir: P) -> P {
     if dir == P::down() {
-        return P::right();
+        P::right()
     } else if dir == P::right() {
-        return P::up();
+        P::up()
     } else if dir == P::up() {
-        return P::left();
+        P::left()
     } else {
-        return P::down();
+        P::down()
     }
 }
 
