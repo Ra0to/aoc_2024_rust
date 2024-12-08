@@ -1,6 +1,6 @@
 use std::ops;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct P {
     pub x: i32,
     pub y: i32,
@@ -63,6 +63,17 @@ impl ops::Add for P {
     }
 }
 
+impl ops::Sub for P {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self::Output {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+        }
+    }
+}
+
 impl ops::Mul<i32> for P {
     type Output = Self;
 
@@ -79,5 +90,16 @@ impl ops::Mul<P> for i32 {
 
     fn mul(self, rhs: P) -> Self::Output {
         rhs * self
+    }
+}
+
+impl ops::Div<i32> for P {
+    type Output = Self;
+
+    fn div(self, rhs: i32) -> Self::Output {
+        Self::Output {
+            x: self.x / rhs,
+            y: self.y / rhs,
+        }
     }
 }
