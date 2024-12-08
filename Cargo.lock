@@ -28,6 +28,7 @@ name = "aoc_2024_rust"
 version = "0.1.0"
 dependencies = [
  "criterion",
+ "rayon",
  "regex",
 ]
 
