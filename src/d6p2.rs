@@ -1,8 +1,10 @@
 // Problem: https://adventofcode.com/2024/day/6
 
 use crate::d6p1;
+use crate::d6p1::get_next_dir;
 use crate::extensions::*;
 use crate::point::P;
+use rayon::prelude::*;
 
 #[allow(dead_code)]
 pub fn read_input() -> (Vec<Vec<i32>>, P) {
@@ -11,95 +13,65 @@ pub fn read_input() -> (Vec<Vec<i32>>, P) {
 
 #[allow(dead_code)]
 pub fn solve(input: (Vec<Vec<i32>>, P)) -> usize {
-    let mut new_obstacles_count = 0;
-    let map = input.0;
-    let pos = input.1;
+    let (map, start_pos) = input;
 
-    for y in 0..map.len() {
-        let line_len = map[y].len();
-        for x in 0..line_len {
-            let p = P::pair(x as i32, y as i32);
-            if p == pos {
-                continue;
-            }
+    let mut visited_map = map.clone();
+    d6p1::move_guard(&mut visited_map, start_pos, P::down());
 
-            match map.get_by_p(p) {
-                Some(e) => match *e {
-                    -1 => continue,
-                    _ => {
-                        let mut new_map = map.clone();
-                        new_map[y][x] = -1;
-                        if is_loop(&mut new_map, pos) {
-                            new_obstacles_count += 1;
-                        }
+    map.par_iter()
+        .enumerate()
+        .map(|(y, line)| {
+            line.par_iter()
+                .enumerate()
+                .map(|(x, el)| {
+                    let p = P::pair(x as i32, y as i32);
+
+                    if p == start_pos {
+                        return 0;
                     }
-                },
-                None => panic!("We are out of map bounds"),
-            }
-        }
-    }
 
-    new_obstacles_count
+                    if *el == -1 {
+                        return 0;
+                    }
+
+                    // New block outside of guard path can't change anything
+                    if visited_map[y][x] <= 0 {
+                        return 0;
+                    }
+
+                    let mut new_map = map.clone();
+                    new_map[y][x] = -1;
+                    if is_loop(&mut new_map, start_pos) {
+                        1
+                    } else {
+                        0
+                    }
+                })
+                .sum::<usize>()
+        })
+        .sum()
 }
 
-pub fn is_loop(map: &mut [Vec<i32>], pos: P) -> bool {
-    if let Some(e) = map.get_mut_by_p(pos) {
-        *e += 1;
-    }
-    // Our map has inverted numbers by Y
-    move_guard(map, pos, P::down())
-}
-
-pub fn move_guard(map: &mut [Vec<i32>], pos: P, dir: P) -> bool {
-    let new_pos = pos + dir;
-    match map.get_by_p(new_pos) {
-        None => false,
-        Some(&-1) => {
-            let dir = get_next_dir(dir);
-            move_guard(map, pos, dir)
+pub fn is_loop(map: &mut [Vec<i32>], mut pos: P) -> bool {
+    *map.get_mut_by_p(pos)
+        .expect("guard initial pos should be inside map") += 1;
+    let mut dir = P::down();
+    while let Some(cell) = map.get_mut_by_p(pos + dir) {
+        if *cell == -1 {
+            dir = get_next_dir(dir);
+            continue;
         }
-        Some(_) => {
-            if let Some(e) = map.get_mut_by_p(new_pos) {
-                *e += 1;
-            }
-            match map.get_mut_by_p(new_pos) {
-                /* 06.11.2024 I have no idea why 5 but this works
-                 * 08.11.2024 5 is correct because, we can pass cell in 4 different directions
-                 * 1. From left to right
-                 * 2. From right to left
-                 * 3. From up to down
-                 * 4. From down to up
-                 *
-                 * Input examle:
-                 *
-                 *     ........
-                 *     ...#....
-                 *     ....#...
-                 *     .#......
-                 *     ...4...#
-                 *     ...^..#.
-                 *     #.......
-                 *     ...#....
-                 *
-                 */
-                Some(e) if *e >= 5 => return true,
-                _ => (),
-            }
-            move_guard(map, new_pos, dir)
-        }
-    }
-}
 
-pub fn get_next_dir(dir: P) -> P {
-    if dir == P::down() {
-        P::right()
-    } else if dir == P::right() {
-        P::up()
-    } else if dir == P::up() {
-        P::left()
-    } else {
-        P::down()
+        *cell += 1;
+
+        if *cell >= 5 {
+            return true;
+        }
+
+        pos = pos + dir;
     }
+
+    false
 }
 
 #[cfg(test)]
