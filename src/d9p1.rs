@@ -3,20 +3,20 @@
 use std::fs::read_to_string;
 
 #[allow(dead_code)]
-pub fn read_input() -> Vec<u32> {
+pub fn read_input() -> Vec<usize> {
     parse_input(&read_to_string("./inputs/d9").unwrap())
 }
 
-pub fn parse_input(input: &str) -> Vec<u32> {
+pub fn parse_input(input: &str) -> Vec<usize> {
     input
         .trim()
         .chars()
-        .map(|ch| ch.to_digit(10).unwrap())
+        .map(|ch| ch.to_digit(10).unwrap() as usize)
         .collect()
 }
 
 #[allow(dead_code)]
-pub fn solve(input: Vec<u32>) -> u64 {
+pub fn solve(input: Vec<usize>) -> u64 {
     let mut memo = Vec::with_capacity(input.len() * 9);
 
     for (index, x) in input.iter().enumerate() {

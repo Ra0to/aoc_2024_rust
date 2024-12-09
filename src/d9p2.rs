@@ -1,19 +1,26 @@
 // Problem: https://adventofcode.com/2024/day/9
 
+use std::{cmp::Reverse, collections::BinaryHeap};
+
 use crate::d9p1;
 
 #[allow(dead_code)]
-pub fn read_input() -> Vec<u32> {
+pub fn read_input() -> Vec<usize> {
     d9p1::read_input()
 }
 
 #[allow(dead_code)]
-pub fn solve(input: Vec<u32>) -> u64 {
+pub fn solve(input: Vec<usize>) -> u64 {
     let mut memo = Vec::with_capacity(input.len() * 9);
+    let mut free_spaces = [const { BinaryHeap::<Reverse<usize>>::new() }; 10];
 
     for (index, x) in input.iter().enumerate() {
         let is_block = index % 2 == 0;
         let id = if is_block { Some(index / 2) } else { None };
+
+        if !is_block {
+            free_spaces[*x].push(Reverse(memo.len()));
+        }
 
         for _ in 0..*x {
             memo.push(id);
@@ -29,10 +36,8 @@ pub fn solve(input: Vec<u32>) -> u64 {
 
         let block_len = calc_block_len(&memo, r);
         let max_pos = r + 1 - block_len;
-        if let Some(new_pos) = try_find_free_space(&memo, max_pos, block_len) {
-            for i in 0..block_len {
-                memo[new_pos + i] = memo[r - i].take();
-            }
+        if let Some(new_pos) = try_find_free_space(&mut free_spaces, max_pos, block_len) {
+            swap(&mut memo, new_pos, r, block_len);
         }
 
         r = max_pos;
@@ -48,15 +53,48 @@ pub fn solve(input: Vec<u32>) -> u64 {
         .sum()
 }
 
-fn try_find_free_space(memo: &[Option<usize>], max_pos: usize, req: usize) -> Option<usize> {
-    let mut pos = 0;
-    while pos < max_pos {
-        let block_len = calc_block_len(memo, pos);
-        if memo[pos].is_none() && block_len >= req {
-            return Some(pos);
-        }
+fn swap(memo: &mut [Option<usize>], left: usize, right: usize, len: usize) {
+    for i in 0..len {
+        memo.swap(left + i, right - i);
+    }
+}
 
-        pos += block_len;
+fn try_find_free_space(
+    free_space: &mut [BinaryHeap<Reverse<usize>>],
+    max_pos: usize,
+    req: usize,
+) -> Option<usize> {
+    let mut candidate_len = None;
+    let mut candidate_ind = None;
+
+    for len in req..free_space.len() {
+        let heap = &mut free_space[len];
+        match heap.peek() {
+            None => continue,
+            Some(ind) if ind.0 > max_pos => continue,
+            Some(ind) => {
+                if candidate_len.is_none() {
+                    candidate_len = Some(len);
+                    candidate_ind = Some(ind.0);
+                    continue;
+                }
+
+                if candidate_ind.unwrap() > ind.0 {
+                    candidate_len = Some(len);
+                    candidate_ind = Some(ind.0);
+                }
+            }
+        }
+    }
+
+    if let Some(len) = candidate_len {
+        let heap = &mut free_space[len];
+        let index = heap.pop().unwrap().0;
+        let new_len = len - req;
+        if new_len > 0 {
+            free_space[new_len].push(Reverse(index + req));
+        }
+        return Some(index);
     }
 
     None
@@ -67,7 +105,9 @@ fn calc_block_len(memo: &[Option<usize>], start: usize) -> usize {
         true
     } else if start == memo.len() - 1 {
         false
-    } else { memo[start] != memo[start - 1] };
+    } else {
+        memo[start] != memo[start - 1]
+    };
 
     let mut ind = start;
     let mut cnt = 0;
@@ -99,6 +139,19 @@ mod tests {
         // Given
         let input = parse_input("2333133121414131402");
         let answer = 2858;
+
+        // When
+        let result = solve(input);
+
+        // Then
+        assert_eq!(result, answer);
+    }
+
+    #[test]
+    fn test_2() {
+        // Given
+        let input = parse_input("23122");
+        let answer = 14;
 
         // When
         let result = solve(input);

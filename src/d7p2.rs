@@ -160,7 +160,7 @@ pub fn solve_recursion_parallel(input: Vec<(i64, Vec<i64>)>) -> i64 {
 
 // ~1.5 s
 // Generator is slower than recursion because we should evaluate all line (execute all operations
-// on any op change). Recursion insted stores previous calculations in the call stack. 
+// on any op change). Recursion insted stores previous calculations in the call stack.
 //
 // N - number of element in line
 //
