@@ -22,7 +22,7 @@ pub fn solve(input: Vec<u32>) -> u64 {
 
     let mut r = memo.len() - 1;
     while r > 0 {
-        if let None = memo[r] {
+        if memo[r].is_none() {
             r -= 1;
             continue;
         }
@@ -67,11 +67,7 @@ fn calc_block_len(memo: &[Option<usize>], start: usize) -> usize {
         true
     } else if start == memo.len() - 1 {
         false
-    } else if memo[start] == memo[start - 1] {
-        false
-    } else {
-        true
-    };
+    } else { memo[start] != memo[start - 1] };
 
     let mut ind = start;
     let mut cnt = 0;
