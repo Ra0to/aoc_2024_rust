@@ -67,8 +67,7 @@ fn try_find_free_space(
     let mut candidate_len = None;
     let mut candidate_ind = None;
 
-    for len in req..free_space.len() {
-        let heap = &mut free_space[len];
+    for (len, heap) in free_space.iter_mut().enumerate().skip(req) {
         match heap.peek() {
             None => continue,
             Some(ind) if ind.0 > max_pos => continue,
