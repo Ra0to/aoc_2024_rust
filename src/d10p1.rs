@@ -48,14 +48,14 @@ fn find_reachable_peaks(map: &[Vec<u8>], pos: P, reached_peaks: &mut HashSet<P>)
     match cur {
         Some(height) if *height == 9 => {
             reached_peaks.insert(pos);
-        },
+        }
         Some(height) => {
             [P::down(), P::right(), P::up(), P::left()]
-                    .into_iter()
-                    .map(|dir| pos + dir)
-                    .filter(|new_pos| map.is_at_p(*new_pos, &(*height + 1)))
-                    .for_each(|new_pos| find_reachable_peaks(map, new_pos, reached_peaks));
-        },
+                .into_iter()
+                .map(|dir| pos + dir)
+                .filter(|new_pos| map.is_at_p(*new_pos, &(*height + 1)))
+                .for_each(|new_pos| find_reachable_peaks(map, new_pos, reached_peaks));
+        }
         None => (),
     }
 }
