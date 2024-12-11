@@ -12,12 +12,15 @@ pub fn read_input() -> Vec<u64> {
         .collect()
 }
 
-const TOTAL_BLINKS: usize = 25;
+#[allow(dead_code)]
+pub fn solve(input: Vec<u64>) -> usize {
+    solve_for_blinks(input, 25)
+}
 
 #[allow(dead_code)]
-pub fn solve(mut input: Vec<u64>) -> usize {
-    let mut new_input = vec![];
-    for _blink in 1..=TOTAL_BLINKS {
+pub fn solve_for_blinks(mut input: Vec<u64>, blinks_count: usize) -> usize {
+    for _blink in 1..=blinks_count {
+        let mut new_input = vec![];
         for stone in &input {
             if *stone == 0 {
                 new_input.push(1);
@@ -34,7 +37,6 @@ pub fn solve(mut input: Vec<u64>) -> usize {
         }
 
         input = new_input;
-        new_input = vec![];
     }
 
     input.len()
@@ -58,7 +60,23 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "not solved yet"]
+    fn test_2() {
+        // Given
+        let input = vec![125, 17];
+
+        // When
+
+        // Then
+        assert_eq!(solve_for_blinks(input.clone(), 1), 3);
+        assert_eq!(solve_for_blinks(input.clone(), 2), 4);
+        assert_eq!(solve_for_blinks(input.clone(), 3), 5);
+        assert_eq!(solve_for_blinks(input.clone(), 4), 9);
+        assert_eq!(solve_for_blinks(input.clone(), 5), 13);
+        assert_eq!(solve_for_blinks(input.clone(), 6), 22);
+        assert_eq!(solve_for_blinks(input.clone(), 25), 55312);
+    }
+
+    #[test]
     fn problem() {
         // Given
         let input = read_input();
