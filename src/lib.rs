@@ -1,6 +1,10 @@
 mod extensions;
 mod point;
 
+pub mod d10p1;
+pub mod d10p2;
+pub mod d11p1;
+pub mod d11p2;
 pub mod d1p1;
 pub mod d1p2;
 pub mod d2p1;
@@ -19,6 +23,3 @@ pub mod d8p1;
 pub mod d8p2;
 pub mod d9p1;
 pub mod d9p2;
-pub mod d10p1;
-pub mod d10p2;
-pub mod d11p1;

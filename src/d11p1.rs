@@ -1,6 +1,6 @@
 // Problem: https://adventofcode.com/2024/day/11
 
-use std::fs::read_to_string;
+use std::{collections::HashMap, fs::read_to_string};
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<u64> {
@@ -18,28 +18,37 @@ pub fn solve(input: Vec<u64>) -> usize {
 }
 
 #[allow(dead_code)]
-pub fn solve_for_blinks(mut input: Vec<u64>, blinks_count: usize) -> usize {
-    for _blink in 1..=blinks_count {
-        let mut new_input = vec![];
-        for stone in &input {
-            if *stone == 0 {
-                new_input.push(1);
-                continue;
-            } else if stone.to_string().len() % 2 == 0 {
-                let rep = stone.to_string();
-                let len = rep.len();
-                let half_len = len / 2;
-                new_input.push(rep[..half_len].parse::<u64>().unwrap());
-                new_input.push(rep[half_len..].parse::<u64>().unwrap());
-            } else {
-                new_input.push(stone * 2024);
-            }
-        }
+pub fn solve_for_blinks(input: Vec<u64>, blinks_count: usize) -> usize {
+    input
+        .iter()
+        .map(|stone| ans(*stone, blinks_count, &mut HashMap::new()))
+        .sum()
+}
 
-        input = new_input;
+fn ans(val: u64, blinks_count: usize, memo: &mut HashMap<(u64, usize), usize>) -> usize {
+    if blinks_count == 0 {
+        return 1;
+    }
+    if let Some(ans) = memo.get(&(val, blinks_count)) {
+        return *ans;
     }
 
-    input.len()
+    let res = match val {
+        _ if val == 0 => ans(1, blinks_count - 1, memo),
+        _ if val.to_string().len() % 2 == 0 => {
+            let rep = val.to_string();
+            let len = rep.len();
+            let half_len = len / 2;
+            let left = rep[..half_len].parse::<u64>().unwrap();
+            let right = rep[half_len..].parse::<u64>().unwrap();
+
+            ans(left, blinks_count - 1, memo) + ans(right, blinks_count - 1, memo)
+        }
+        _ => ans(val * 2024, blinks_count - 1, memo),
+    };
+    memo.insert((val, blinks_count), res);
+
+    res
 }
 
 #[cfg(test)]
