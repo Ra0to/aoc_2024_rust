@@ -1,5 +1,6 @@
 // Problem: https://adventofcode.com/2024/day/11
 
+use crate::extensions::{num_len, split_num_in_two};
 use std::{collections::HashMap, fs::read_to_string};
 
 #[allow(dead_code)]
@@ -29,19 +30,15 @@ fn ans(val: u64, blinks_count: usize, memo: &mut HashMap<(u64, usize), usize>) -
     if blinks_count == 0 {
         return 1;
     }
+
     if let Some(ans) = memo.get(&(val, blinks_count)) {
         return *ans;
     }
 
     let res = match val {
         _ if val == 0 => ans(1, blinks_count - 1, memo),
-        _ if val.to_string().len() % 2 == 0 => {
-            let rep = val.to_string();
-            let len = rep.len();
-            let half_len = len / 2;
-            let left = rep[..half_len].parse::<u64>().unwrap();
-            let right = rep[half_len..].parse::<u64>().unwrap();
-
+        _ if num_len(val) % 2 == 0 => {
+            let (left, right) = split_num_in_two(val);
             ans(left, blinks_count - 1, memo) + ans(right, blinks_count - 1, memo)
         }
         _ => ans(val * 2024, blinks_count - 1, memo),
