@@ -3,7 +3,16 @@ use std::ops;
 #[allow(dead_code)]
 pub const DIRECTIONS_4: [P; 4] = [P::up(), P::right(), P::down(), P::left()];
 #[allow(dead_code)]
-pub const DIRECTIONS_8: [P; 8] = [P::up(), P::up_right(), P::right(), P::down_right(), P::down(), P::down_left(), P::left(), P::up_left()];
+pub const DIRECTIONS_8: [P; 8] = [
+    P::up(),
+    P::up_right(),
+    P::right(),
+    P::down_right(),
+    P::down(),
+    P::down_left(),
+    P::left(),
+    P::up_left(),
+];
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct P {
