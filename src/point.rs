@@ -1,5 +1,10 @@
 use std::ops;
 
+#[allow(dead_code)]
+pub const DIRECTIONS_4: [P; 4] = [P::up(), P::right(), P::down(), P::left()];
+#[allow(dead_code)]
+pub const DIRECTIONS_8: [P; 8] = [P::up(), P::up_right(), P::right(), P::down_right(), P::down(), P::down_left(), P::left(), P::up_left()];
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct P {
     pub x: i32,
@@ -7,48 +12,48 @@ pub struct P {
 }
 
 impl P {
-    pub fn pair(x: i32, y: i32) -> Self {
+    pub const fn pair(x: i32, y: i32) -> Self {
         Self { x, y }
     }
 
-    pub fn zero() -> Self {
+    pub const fn zero() -> Self {
         Self::pair(0, 0)
     }
 
-    pub fn one() -> Self {
+    pub const fn one() -> Self {
         Self::pair(1, 1)
     }
 
-    pub fn up() -> Self {
+    pub const fn up() -> Self {
         Self::pair(0, 1)
     }
 
-    pub fn down() -> Self {
+    pub const fn down() -> Self {
         Self::pair(0, -1)
     }
 
-    pub fn left() -> Self {
+    pub const fn left() -> Self {
         Self::pair(-1, 0)
     }
 
-    pub fn right() -> Self {
+    pub const fn right() -> Self {
         Self::pair(1, 0)
     }
 
-    pub fn down_left() -> Self {
-        Self::down() + Self::left()
+    pub const fn down_left() -> Self {
+        Self::pair(-1, -1)
     }
 
-    pub fn down_right() -> Self {
-        Self::down() + Self::right()
+    pub const fn down_right() -> Self {
+        Self::pair(1, -1)
     }
 
-    pub fn up_left() -> Self {
-        Self::up() + Self::left()
+    pub const fn up_left() -> Self {
+        Self::pair(-1, 1)
     }
 
-    pub fn up_right() -> Self {
-        Self::up() + Self::right()
+    pub const fn up_right() -> Self {
+        Self::pair(1, 1)
     }
 }
 

@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::fs::read_to_string;
 
 use crate::extensions::*;
-use crate::point::P;
+use crate::point::*;
 
 #[allow(dead_code)]
 pub fn read_input() -> Vec<Vec<u8>> {
@@ -50,7 +50,7 @@ fn find_reachable_peaks(map: &[Vec<u8>], pos: P, reached_peaks: &mut HashSet<P>)
             reached_peaks.insert(pos);
         }
         Some(height) => {
-            [P::down(), P::right(), P::up(), P::left()]
+            DIRECTIONS_4
                 .into_iter()
                 .map(|dir| pos + dir)
                 .filter(|new_pos| map.is_at_p(*new_pos, &(*height + 1)))
