@@ -93,7 +93,9 @@ fn mark_perimeter_as_used(
         match input.get_by_p(pos) {
             None => break,
             Some(new) if *new != current => break,
-            Some(_) if !neighbor.is_some_and(|val| *val == current) => used_perimeters.get_mut_by_p(pos).unwrap().mark(dir),
+            Some(_) if !neighbor.is_some_and(|val| *val == current) => {
+                used_perimeters.get_mut_by_p(pos).unwrap().mark(dir)
+            }
             Some(_) => break,
         }
     }
@@ -109,7 +111,9 @@ fn mark_perimeter_as_used(
         match input.get_by_p(pos) {
             None => break,
             Some(new) if *new != current => break,
-            Some(_) if !neighbor.is_some_and(|val| *val == current) => used_perimeters.get_mut_by_p(pos).unwrap().mark(dir),
+            Some(_) if !neighbor.is_some_and(|val| *val == current) => {
+                used_perimeters.get_mut_by_p(pos).unwrap().mark(dir)
+            }
             Some(_) => break,
         }
     }
