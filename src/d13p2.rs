@@ -12,9 +12,7 @@ pub fn read_input() -> Vec<ClawMachineDefinition> {
 pub fn solve(input: Vec<ClawMachineDefinition>) -> u128 {
     input
         .into_iter()
-        .map(|def| try_find_solution(&def, None, Some(10000000000000)))
-        .filter(|ans| ans.is_some())
-        .map(|ans| ans.unwrap())
+        .filter_map(|def| try_find_solution(&def, None, Some(10000000000000)))
         .sum()
 }
 
