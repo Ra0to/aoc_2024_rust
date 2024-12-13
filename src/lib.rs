@@ -8,6 +8,7 @@ pub mod d11p2;
 pub mod d12p1;
 pub mod d12p2;
 pub mod d13p1;
+pub mod d13p2;
 pub mod d1p1;
 pub mod d1p2;
 pub mod d2p1;
