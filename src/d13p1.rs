@@ -67,34 +67,47 @@ impl ClawMachineDefinition {
 pub fn solve(input: Vec<ClawMachineDefinition>) -> u32 {
     input
         .into_iter()
-        .map(|def| try_find_solution(&def))
+        .map(|def| try_find_solution(&def, Some(MOVE_LIMIT)))
         .filter(|ans| ans.is_some())
         .map(|ans| ans.unwrap())
         .sum()
 }
 
-pub fn try_find_solution(def: &ClawMachineDefinition) -> Option<u32> {
-    let mut ans = None;
-    for a_cnt in 0..=MOVE_LIMIT {
-        for b_cnt in 0..=MOVE_LIMIT {
-            let pos = (a_cnt as i32) * def.a_move + (b_cnt as i32) * def.b_move;
-            if pos != def.prize {
-                continue;
-            }
+pub fn try_find_solution(def: &ClawMachineDefinition, limit: Option<usize>) -> Option<u32> {
+    let p = def.prize;
+    let p_a = def.a_move;
+    let p_b = def.b_move;
 
-            let price = (a_cnt as u32) * def.a_price + (b_cnt as u32) * def.b_price;
+    let a_nominator = p.y * p_b.x - p_b.y * p.x;
+    let a_denominator = p_a.y * p_b.x - p_a.x * p_b.y;
 
-            if ans.is_none() {
-                ans = Some(price);
-                continue;
-            }
-
-            let ans_val = ans.unwrap();
-            ans = Some(ans_val.min(price));
-        }
+    if a_nominator % a_denominator != 0 {
+        return None;
     }
 
-    ans
+    let a = a_nominator / a_denominator;
+
+    if a < 0 || limit.is_some_and(|l| a as usize > l) {
+        return None;
+    }
+
+    let b_nominator = p.x - a * p_a.x;
+    let b_denmominator = p_b.x;
+
+    if b_nominator % b_denmominator != 0 {
+        return None;
+    }
+
+    let b = b_nominator / b_denmominator;
+
+    if b < 0 || limit.is_some_and(|l| b as usize > l) {
+        return None;
+    }
+
+    let a = a as u32;
+    let b = b as u32;
+
+    Some(a * def.a_price + b * def.b_price)
 }
 
 #[cfg(test)]
