@@ -57,10 +57,7 @@ pub fn solve_for_map(input: Vec<(P, P)>, time: i32, map_size: P) -> u32 {
 /// -------
 #[allow(dead_code)]
 pub fn find_quadrant(info: (P, P), time: i32, map_size: P) -> usize {
-    let start = info.0;
-    let v = info.1;
-    let raw_pos = start + v * time;
-    let pos = get_pos_in_map(raw_pos, map_size);
+    let pos = get_final_pos(info, time, map_size);
     let x = pos.x;
     let y = pos.y;
 
@@ -84,6 +81,13 @@ pub fn find_quadrant(info: (P, P), time: i32, map_size: P) -> usize {
             3
         }
     }
+}
+
+pub fn get_final_pos(info: (P, P), time: i32, map_size: P) -> P {
+    let start = info.0;
+    let v = info.1;
+    let raw_pos = start + v * time;
+    get_pos_in_map(raw_pos, map_size)
 }
 
 pub fn get_pos_in_map(pos: P, map_size: P) -> P {
