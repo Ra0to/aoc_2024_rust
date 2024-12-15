@@ -44,9 +44,10 @@ pub trait TableExtensions<T> {
     fn get_mut_by_p(&mut self, index: P) -> Option<&mut T>;
     fn height(&self) -> usize;
     fn width(&self) -> usize;
+    fn swap_by_p(&mut self, first: P, second: P);
 }
 
-impl<T: std::cmp::PartialEq> TableExtensions<T> for [Vec<T>] {
+impl<T: std::cmp::PartialEq + Clone> TableExtensions<T> for [Vec<T>] {
     fn get_by_p(&self, index: P) -> Option<&T> {
         self.get_by(index.y).and_then(|line| line.get_by(index.x))
     }
@@ -66,6 +67,14 @@ impl<T: std::cmp::PartialEq> TableExtensions<T> for [Vec<T>] {
 
     fn width(&self) -> usize {
         self[0].len()
+    }
+
+    fn swap_by_p(&mut self, first: P, second: P) {
+        let cur_value = self.get_by_p(first).unwrap().clone();
+        let other_value = self.get_by_p(second).unwrap().clone();
+
+        *self.get_mut_by_p(first).unwrap() = other_value;
+        *self.get_mut_by_p(second).unwrap() = cur_value;
     }
 }
 

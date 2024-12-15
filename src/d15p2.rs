@@ -1,55 +1,9 @@
 // Problem: https://adventofcode.com/2024/day/15
 
+use crate::d15p1::{find_free_spot, move_blocks, Move};
 use crate::extensions::*;
 use crate::point::P;
 use std::fs::read_to_string;
-
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub enum Move {
-    Up,
-    Right,
-    Down,
-    Left,
-}
-
-impl Move {
-    pub fn parse(ch: char) -> Move {
-        match ch {
-            '^' => Move::Up,
-            '<' => Move::Left,
-            '>' => Move::Right,
-            'v' => Move::Down,
-            _ => panic!("unknown move {}", ch),
-        }
-    }
-
-    pub fn to_p(self) -> P {
-        match self {
-            Move::Up => P::up(),
-            Move::Right => P::right(),
-            Move::Down => P::down(),
-            Move::Left => P::left(),
-        }
-    }
-
-    pub fn invert_by_y(self) -> Self {
-        match self {
-            Move::Up => Move::Down,
-            Move::Right => Move::Right,
-            Move::Down => Move::Up,
-            Move::Left => Move::Left,
-        }
-    }
-
-    pub fn opposite(self) -> Self {
-        match self {
-            Move::Up => Move::Down,
-            Move::Right => Move::Left,
-            Move::Down => Move::Up,
-            Move::Left => Move::Right,
-        }
-    }
-}
 
 #[allow(dead_code)]
 pub fn read_input() -> (Vec<Vec<i8>>, P, Vec<Move>) {
@@ -72,6 +26,17 @@ pub fn parse_input(input: &str) -> (Vec<Vec<i8>>, P, Vec<Move>) {
         if is_map {
             map.push(
                 line.chars()
+                    .map(|ch| {
+                        match ch {
+                            '@' => "@.",
+                            '#' => "##",
+                            'O' => "[]",
+                            '.' => "..",
+                            ch => panic!("unexpected map char {}", ch),
+                        }
+                        .chars()
+                    })
+                    .flatten()
                     .enumerate()
                     .map(|(x, ch)| {
                         if ch == '@' {
@@ -80,7 +45,8 @@ pub fn parse_input(input: &str) -> (Vec<Vec<i8>>, P, Vec<Move>) {
 
                         match ch {
                             '#' => -1,
-                            'O' => 1,
+                            '[' => 1,
+                            ']' => 2,
                             _ => 0,
                         }
                     })
@@ -114,37 +80,52 @@ pub fn solve(input: (Vec<Vec<i8>>, P, Vec<Move>)) -> u32 {
 }
 
 pub fn process_move(map: &mut [Vec<i8>], pos: P, mv: Move) -> P {
-    let free_spot = find_free_spot(map, pos, mv);
-    if free_spot.is_none() {
-        return pos;
-    }
+    if mv == Move::Left || mv == Move::Right {
+        let free_spot = find_free_spot(map, pos, mv);
+        if free_spot.is_none() {
+            return pos;
+        }
 
-    let free_spot = free_spot.unwrap();
-    move_blocks(map, free_spot, pos, mv.opposite().to_p());
+        let free_spot = free_spot.unwrap();
+        move_blocks(map, free_spot, pos, mv.opposite().to_p());
 
-    pos + mv.to_p()
-}
-
-pub fn find_free_spot(map: &[Vec<i8>], pos: P, mv: Move) -> Option<P> {
-    let new_pos = pos + mv.to_p();
-    match map.get_by_p(new_pos) {
-        // Free spot
-        Some(cell) if *cell == 0 => Some(new_pos),
-        // Wall
-        Some(cell) if *cell == -1 => None,
-        Some(_) => find_free_spot(map, new_pos, mv),
-        None => None,
+        return pos + mv.to_p();
+    } else {
+        if can_move_blocks(map, pos, mv) {
+            move_blocks_vert(map, pos, mv);
+            pos + mv.to_p()
+        } else {
+            pos
+        }
     }
 }
 
-pub fn move_blocks(map: &mut [Vec<i8>], start: P, cur_pos: P, dir: P) {
-    if start == cur_pos {
-        return;
+pub fn can_move_blocks(map: &mut [Vec<i8>], pos: P, mv: Move) -> bool {
+    let next_pos = pos + mv.to_p();
+    match map.get_by_p(next_pos).unwrap() {
+        -1 => false,
+        0 => true,
+        1 => can_move_blocks(map, next_pos, mv) && can_move_blocks(map, next_pos + P::right(), mv),
+        2 => can_move_blocks(map, next_pos, mv) && can_move_blocks(map, next_pos + P::left(), mv),
+        block => panic!("unexpected map block {}", block),
     }
+}
 
-    let other_pos = start + dir;
-    map.swap_by_p(start, other_pos);
-    move_blocks(map, other_pos, cur_pos, dir);
+pub fn move_blocks_vert(map: &mut [Vec<i8>], pos: P, mv: Move) {
+    let next_pos = pos + mv.to_p();
+    match map.get_by_p(next_pos).unwrap() {
+        1 => {
+            move_blocks_vert(map, next_pos, mv);
+            move_blocks_vert(map, next_pos + P::right(), mv);
+        },
+        2 => {
+            move_blocks_vert(map, next_pos, mv);
+            move_blocks_vert(map, next_pos + P::left(), mv);
+        },
+        _ => (),
+    };
+
+    map.swap_by_p(pos, next_pos);
 }
 
 pub fn calc_coords(map: &[Vec<i8>]) -> u32 {
@@ -170,30 +151,6 @@ mod tests {
     fn test_1() {
         // Given
         let input = parse_input(
-            "########
-#..O.O.#
-##@.O..#
-#...O..#
-#.#.O..#
-#...O..#
-#......#
-########
-
-<^^>>>vv<v>>v<<",
-        );
-        let answer = 2028;
-
-        // When
-        let result = solve(input);
-
-        // Then
-        assert_eq!(result, answer);
-    }
-
-    #[test]
-    fn test_2() {
-        // Given
-        let input = parse_input(
             "##########
 #..O..O.O#
 #......O.#
@@ -216,7 +173,7 @@ vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v
 ^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>
 v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^",
         );
-        let answer = 10092;
+        let answer = 9021;
 
         // When
         let result = solve(input);
@@ -229,7 +186,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^",
     fn problem() {
         // Given
         let input = read_input();
-        let answer = read_to_string("./inputs/d15p1_answer")
+        let answer = read_to_string("./inputs/d15p2_answer")
             .unwrap()
             .trim()
             .parse::<u32>()
