@@ -117,11 +117,11 @@ pub fn move_blocks_vert(map: &mut [Vec<i8>], pos: P, mv: Move) {
         1 => {
             move_blocks_vert(map, next_pos, mv);
             move_blocks_vert(map, next_pos + P::right(), mv);
-        },
+        }
         2 => {
             move_blocks_vert(map, next_pos, mv);
             move_blocks_vert(map, next_pos + P::left(), mv);
-        },
+        }
         _ => (),
     };
 

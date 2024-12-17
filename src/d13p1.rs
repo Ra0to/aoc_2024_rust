@@ -73,7 +73,11 @@ pub fn solve(input: Vec<ClawMachineDefinition>) -> u128 {
         .sum()
 }
 
-pub fn try_find_solution(def: &ClawMachineDefinition, limit: Option<usize>, addition: Option<i128>) -> Option<u128> {
+pub fn try_find_solution(
+    def: &ClawMachineDefinition,
+    limit: Option<usize>,
+    addition: Option<i128>,
+) -> Option<u128> {
     let addition = addition.unwrap_or(0);
     let p = def.prize;
     let p_a = def.a_move;
