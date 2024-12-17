@@ -103,7 +103,7 @@ pub fn solve(input: (Vec<Vec<i8>>, P, P)) -> u32 {
     costs[&end]
 }
 
-fn clockwise(dir: P) -> P {
+pub fn clockwise(dir: P) -> P {
     if dir == P::up() {
         P::right()
     } else if dir == P::right() {
@@ -115,7 +115,7 @@ fn clockwise(dir: P) -> P {
     }
 }
 
-fn counterclockwise(dir: P) -> P {
+pub fn counterclockwise(dir: P) -> P {
     if dir == P::up() {
         P::left()
     } else if dir == P::left() {
