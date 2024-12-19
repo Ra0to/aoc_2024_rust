@@ -20,6 +20,17 @@ pub fn solve_for_map(input: Vec<P>, map_size: usize, time: usize) -> P {
     let n = map_size;
     let start = P::zero();
     let end = P::pair((n - 1) as i32, (n - 1) as i32);
+
+    let timeframes = (time..input.len()).into_iter().collect::<Vec<usize>>();
+    let ind = timeframes.partition_point(|t| {
+        d18p1::find_shortest_path(&get_map_at_time(&input, map_size, *t), start, end).is_some()
+    });
+    let no_path_time = timeframes[ind - 1];
+    input[no_path_time]
+}
+
+pub fn get_map_at_time(input: &[P], map_size: usize, time: usize) -> Vec<Vec<i8>> {
+    let n = map_size;
     let mut map: Vec<Vec<i8>> = vec![vec![0; n]; n];
 
     for i in 0..time {
@@ -27,15 +38,7 @@ pub fn solve_for_map(input: Vec<P>, map_size: usize, time: usize) -> P {
         *map.get_mut_by_p(byte).unwrap() = -1;
     }
 
-    for t in time..input.len() {
-        let byte = input[t];
-        *map.get_mut_by_p(byte).unwrap() = -1;
-        if d18p1::find_shortest_path(&map, start, end).is_none() {
-            return byte;
-        }
-    }
-
-    panic!("answer not found")
+    map
 }
 
 #[cfg(test)]
