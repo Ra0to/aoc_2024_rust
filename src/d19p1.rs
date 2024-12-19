@@ -1,6 +1,6 @@
 // Problem: https://adventofcode.com/2024/day/19
 
-use std::{collections::HashSet, fs::read_to_string};
+use std::{collections::HashMap, fs::read_to_string};
 
 #[allow(dead_code)]
 pub fn read_input() -> (Vec<String>, Vec<String>) {
@@ -31,35 +31,41 @@ pub fn solve(input: (Vec<String>, Vec<String>)) -> usize {
     let available = input.0;
     let puzzles = input.1;
 
-    let mut visited = HashSet::new();
+    let mut visited = HashMap::new();
     puzzles
         .iter()
         .filter(|puzzle| {
             visited.clear();
-            can_be_created(&available, puzzle, &mut visited)
+            calc_variants(&available, puzzle, &mut visited) > 0
         })
         .count()
 }
 
-pub fn can_be_created(available: &[String], puzzle: &str, visited: &mut HashSet<usize>) -> bool {
-    if visited.contains(&puzzle.len()) {
-        return false;
+pub fn calc_variants(
+    available: &[String],
+    puzzle: &str,
+    visited: &mut HashMap<usize, usize>,
+) -> usize {
+    if visited.contains_key(&puzzle.len()) {
+        return visited[&puzzle.len()];
     }
 
     if puzzle.is_empty() {
-        return true;
+        return 1;
     }
 
+    let mut cnt = 0;
     for towel in available {
         let len = towel.len();
-        if puzzle.starts_with(towel) && can_be_created(available, &puzzle[len..], visited) {
-            return true;
+        if !puzzle.starts_with(towel) {
+            continue;
         }
+        cnt += calc_variants(available, &puzzle[len..], visited);
     }
 
-    visited.insert(puzzle.len());
+    visited.insert(puzzle.len(), cnt);
 
-    false
+    cnt
 }
 
 #[cfg(test)]
