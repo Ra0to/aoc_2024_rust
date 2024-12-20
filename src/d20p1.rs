@@ -1,4 +1,4 @@
-// Problem: https://adventofcode.com/2024/day/19
+// Problem: https://adventofcode.com/2024/day/20
 
 use crate::extensions::*;
 use crate::point::*;
@@ -96,7 +96,8 @@ where
                 continue;
             }
 
-            let cheat_saves = path_costs[&end_node] - path_costs[&start_node] - 2;
+            let skip_len = (end_node.x - start_node.x).abs() + (end_node.y - start_node.y).abs();
+            let cheat_saves = path_costs[&end_node] - path_costs[&start_node] - skip_len as usize;
 
             if cheat_saves == 0 {
                 continue;
