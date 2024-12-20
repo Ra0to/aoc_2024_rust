@@ -54,6 +54,23 @@ pub fn solve(input: (Vec<Vec<i8>>, P, P)) -> usize {
 }
 
 pub fn calc_cheats(input: (Vec<Vec<i8>>, P, P)) -> HashMap<usize, usize> {
+    calc_cheats_with_skips(input, get_skips_for)
+}
+
+pub fn get_skips_for(pos: P) -> Vec<P> {
+    let mut skips = vec![];
+    for dir in DIRECTIONS_4 {
+        let end_node = pos + 2 * dir;
+        skips.push(end_node);
+    }
+
+    skips
+}
+
+pub fn calc_cheats_with_skips<F>(input: (Vec<Vec<i8>>, P, P), get_skips: F) -> HashMap<usize, usize>
+where
+    F: Fn(P) -> Vec<P>,
+{
     let map = input.0;
     let start = input.1;
     let end = input.2;
@@ -64,16 +81,10 @@ pub fn calc_cheats(input: (Vec<Vec<i8>>, P, P)) -> HashMap<usize, usize> {
     let path_costs = retrieve_path_costs(&costs, &path);
 
     for node in path {
-        for dir in DIRECTIONS_4 {
+        for end_node in get_skips(node) {
             let start_node = node;
-            let skip_node = node + dir;
-            let end_node = node + 2 * dir;
 
             if map.get_by_p(end_node).is_none() {
-                continue;
-            }
-
-            if *map.get_by_p(skip_node).unwrap() >= 0 {
                 continue;
             }
 
@@ -86,6 +97,11 @@ pub fn calc_cheats(input: (Vec<Vec<i8>>, P, P)) -> HashMap<usize, usize> {
             }
 
             let cheat_saves = path_costs[&end_node] - path_costs[&start_node] - 2;
+
+            if cheat_saves == 0 {
+                continue;
+            }
+
             if !cheats.contains_key(&cheat_saves) {
                 cheats.insert(cheat_saves, 1);
                 continue;
